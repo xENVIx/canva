@@ -74,59 +74,34 @@ namespace canva
             _tbColor4.Click += _tbColor4_Enter;
 
 
-            
 
 
-            _copiedLabel.Text = "Copied!";
-            _copiedLabel.Font = new Font("Segoe UI", 14, FontStyle.Bold);
-            _copiedLabel.AutoSize = true;
-            _copiedLabel.Visible = false;
-            _copiedLabel.BackColor = Color.Transparent;
-            _copiedLabel.ForeColor = Color.FromArgb(255, 0, 0, 0);
-            _copiedLabel.Parent = this;
-            _copiedLabel.BringToFront();
-            Controls.Add(_copiedLabel);
-
-            _copiedAnimTimer.Interval = 30;
-            _copiedAnimTimer.Elapsed += _copiedAnimTimer_Elapsed;
-
-            _copiedLabel.BackColor = Color.Transparent;
-
-        }
-
-        private void _copiedAnimTimer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
-        {
-
-            this.Invoke(new Action(() =>
+            _copiedOverlayTimer.Interval = 30;
+            _copiedOverlayTimer.Elapsed += (s, e) =>
             {
 
-                _copiedLabel.BringToFront();
-                double elapsed = (DateTime.Now - _copiedStartTime).TotalMilliseconds;
-                double duration = 2000.0; // 2 seconds
-
-                if (elapsed >= duration)
+                this.Invoke(new Action(() =>
                 {
-                    _copiedAnimTimer.Stop();
-                    _copiedLabel.Visible = false;
-                    return;
-                }
+                    double elapsed = (DateTime.Now - _copiedOverlayStart).TotalMilliseconds;
+                    double duration = 1000.0;
 
-                float progress = (float)(elapsed / duration);
-                _copiedScale = 1f + progress * 1.5f; // grows 1x to 2.5x
-                _copiedAlpha = 1f - progress;        // fades from 1 to 0
+                    if (elapsed >= duration)
+                    {
+                        _copiedOverlayTimer.Stop();
+                        _copiedOverlay.Hide();
+                        return;
+                    }
 
-                int alpha = (int)(_copiedAlpha * 255);
-                if (alpha < 0) alpha = 0;
+                    float progress = (float)(elapsed / duration);
+                    _copiedOverlay.Scale = 1f + progress * 1.5f;
+                    _copiedOverlay.Alpha = 1f - progress;
+                    _copiedOverlay.Invalidate();
+                }));
+            };
 
-                _copiedLabel.ForeColor = Color.FromArgb(alpha, 0, 0, 0);
 
-                float newSize = 14 * _copiedScale;
-                _copiedLabel.Font = new Font("Segoe UI", newSize, FontStyle.Bold);
-
-                _copiedLabel.Left = (this.ClientSize.Width - _copiedLabel.Width) / 2;
-            }
-            ));
         }
+
 
         private void _tbColor4_Enter(object? sender, EventArgs e)
         {
@@ -160,20 +135,24 @@ namespace canva
 
         private void StartCopiedAnimation(Control anchor)
         {
-            _copiedScale = 1f;
-            _copiedAlpha = 1f;
-            _copiedStartTime = DateTime.Now;
+            if (!string.IsNullOrWhiteSpace(anchor.Text))
+            {
+                Clipboard.SetText(anchor.Text);
 
-            _copiedLabel.Font = new Font("Segoe UI", 14, FontStyle.Bold);
-            _copiedLabel.Visible = true;
+                _copiedOverlay.DisplayText = "Copied";
+                _copiedOverlayStart = DateTime.Now;
 
-            Point center = new Point(
-                anchor.Left + (anchor.Width - _copiedLabel.Width) / 2,
-                anchor.Top - 30
-            );
+                Point screenCenter = anchor.PointToScreen(new Point(
+                    anchor.Width / 2,
+                    -30
+                ));
 
-            _copiedLabel.Location = center;
-            _copiedAnimTimer.Start();
+                _copiedOverlay.ShowAt(screenCenter);
+                _copiedOverlay.Scale = 1f;
+                _copiedOverlay.Alpha = 1f;
+
+                _copiedOverlayTimer.Start();
+            }
         }
 
         private void _tbColor1_Enter(object? sender, EventArgs e)
@@ -376,12 +355,9 @@ namespace canva
 
         private Cursor? _dripperTool = null;
 
-        
-        private Label _copiedLabel = new Label();
-        private System.Timers.Timer _copiedAnimTimer = new System.Timers.Timer();
-        private float _copiedScale = 1f;
-        private float _copiedAlpha = 1f;
-        private DateTime _copiedStartTime;
+        private OverlayForm _copiedOverlay = new OverlayForm();
+        private DateTime _copiedOverlayStart;
+        private System.Timers.Timer _copiedOverlayTimer = new System.Timers.Timer();
 
         #endregion
 
@@ -452,7 +428,56 @@ namespace canva
     }
 
 
-    
+    public class OverlayForm : Form
+    {
+        public string DisplayText = "Copied";
+        public float Scale = 1f;
+        public float Alpha = 1f;
+
+        public OverlayForm()
+        {
+            this.FormBorderStyle = FormBorderStyle.None;
+            this.ShowInTaskbar = false;
+            this.TopMost = true;
+            this.StartPosition = FormStartPosition.Manual;
+            this.BackColor = Color.LimeGreen; // fake key
+            this.TransparencyKey = Color.LimeGreen;
+            this.Width = 300;
+            this.Height = 100;
+
+            this.DoubleBuffered = true;
+        }
+
+        public void ShowAt(Point center)
+        {
+            this.Location = new Point(center.X - this.Width / 2, center.Y - this.Height / 2);
+            this.Show();
+            this.BringToFront();
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+            Graphics g = e.Graphics;
+
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+            using (Font font = new Font("Segoe UI", 14 * Scale, FontStyle.Bold))
+            {
+                SizeF size = g.MeasureString(DisplayText, font);
+                PointF drawPt = new PointF(
+                    (this.ClientSize.Width - size.Width) / 2,
+                    (this.ClientSize.Height - size.Height) / 2
+                );
+
+                Color color = Color.FromArgb((int)(Alpha * 255), 0, 0, 0);
+                using (Brush b = new SolidBrush(color))
+                {
+                    g.DrawString(DisplayText, font, b, drawPt);
+                }
+            }
+        }
+    }
 
 
 
