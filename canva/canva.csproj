@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Cursors\Cursor38.cur" />
+    <None Remove="Cursors\dropper.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Cursors\Cursor38.cur" />
+    <EmbeddedResource Include="Cursors\dropper.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Cyotek.Windows.Forms.ImageBox_1.1.4.2" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\LibUtil\LibUtil\LibUtil.csproj" />
+    <ProjectReference Include="..\..\Logger_8.0\Logger.csproj" />
+  </ItemGroup>
+
+</Project>
