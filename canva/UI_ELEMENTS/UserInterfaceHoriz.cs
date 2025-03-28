@@ -8,9 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace canva
+namespace canva.UI_ELEMENTS
 {
-    public partial class UserInterfaceHoriz : Form
+    public partial class UserInterfaceHoriz : UserInterface
     {
         public UserInterfaceHoriz()
         {

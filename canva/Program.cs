@@ -2,10 +2,14 @@
 
 using canva.DAT;
 
+using canva.UI_ELEMENTS;
+using LibUI;
+
 namespace canva
 {
     internal static class Program
     {
+
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>
@@ -16,10 +20,25 @@ namespace canva
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
 
-            //LOG.Logger.OnInit("");
-            Config.OnInit();
+            try
+            {
+                //LOG.Logger.OnInit("");
+                Config.OnInit();
 
-            Application.Run(UCCanva.Instance);
+                UserInterface.OnInit();
+
+
+            }
+            catch (Exception ex)
+            {
+                MyMessageBox.ShowError($"Fatal Error During App Initialization: {ex.Message}");
+                return;
+            }
+
+
+
+            Application.Run(UserInterface.Instance);
+
         }
 
 
@@ -27,6 +46,7 @@ namespace canva
 
 
         public static bool Debug = false;
+
 
 
 

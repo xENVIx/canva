@@ -83,8 +83,8 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Update="UserInterfaceVert.cs">
-      <SubType>Form</SubType>
+    <Compile Update="UI_ELEMENTS\UCCommand.cs">
+      <SubType>UserControl</SubType>
     </Compile>
   </ItemGroup>
 
