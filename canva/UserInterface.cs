@@ -1,5 +1,11 @@
-
+﻿
+using canva;
 using canva.ENUM;
+using System.Drawing.Text;
+using System.Linq.Expressions;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Security.Cryptography.X509Certificates;
 
 namespace canva
 {
@@ -23,7 +29,7 @@ namespace canva
 
         public bool ImageLoaded { set { if (value) _colorMode.Set = EColorMode.NONE; else _colorMode.Set = EColorMode.NO_IMG; _imgLoaded = value; } }
 
-        public void SetColorModeNone() { _colorMode.Set = EColorMode.NONE; } 
+        public void SetColorModeNone() { _colorMode.Set = EColorMode.NONE; }
         public EColorMode GetColorMode { get { return _colorMode.Get; } }
 
         #endregion
@@ -39,6 +45,19 @@ namespace canva
         private UserInterface()
         {
             InitializeComponent();
+
+            Assembly asm = Assembly.GetExecutingAssembly();
+            using (Stream s = asm.GetManifestResourceStream("canva.ico.duck1.ico"))
+            {
+                this.Icon = new Icon(s);
+            }
+
+
+            _btnBmps = new ButtonBitmaps();
+            _btnColor1.BackgroundImage = _btnBmps.Enabled1;
+            _btnColor2.BackgroundImage = _btnBmps.Enabled2;
+            _btnColor3.BackgroundImage = _btnBmps.Enabled3;
+            _btnColor4.BackgroundImage = _btnBmps.Enabled4;
 
 
 
@@ -56,7 +75,7 @@ namespace canva
 
             _btnColor1.Enabled = false;
             _btnColor2.Enabled = false;
-            _btnColor3.Enabled = false; 
+            _btnColor3.Enabled = false;
             _btnColor4.Enabled = false;
 
 
@@ -66,6 +85,11 @@ namespace canva
             _cnva.ColorPicked += _cnva_ColorPicked;
 
 
+
+            UpdateTextPosition();
+
+
+            this.Text = "♥ C A N V A ♥";
 
 
             _tbColor1.Click += _tbColor1_Enter;
@@ -98,6 +122,7 @@ namespace canva
                     _copiedOverlay.Invalidate();
                 }));
             };
+
 
 
         }
@@ -137,21 +162,28 @@ namespace canva
         {
             if (!string.IsNullOrWhiteSpace(anchor.Text))
             {
-                Clipboard.SetText(anchor.Text);
+                try
+                {
+                    Clipboard.SetText(anchor.Text);
 
-                _copiedOverlay.DisplayText = "Copied";
-                _copiedOverlayStart = DateTime.Now;
+                    _copiedOverlay.DisplayText = "  Copied\n\tTo\nClipboard";
+                    _copiedOverlayStart = DateTime.Now;
 
-                Point screenCenter = anchor.PointToScreen(new Point(
-                    anchor.Width / 2,
-                    -30
-                ));
+                    Point screenCenter = anchor.PointToScreen(new Point(
+                        anchor.Width / 2,
+                        -30
+                    ));
 
-                _copiedOverlay.ShowAt(screenCenter);
-                _copiedOverlay.Scale = 1f;
-                _copiedOverlay.Alpha = 1f;
+                    _copiedOverlay.ShowAt(screenCenter);
+                    _copiedOverlay.Scale = 1f;
+                    _copiedOverlay.Alpha = 1f;
 
-                _copiedOverlayTimer.Start();
+                    _copiedOverlayTimer.Start();
+                }
+                catch (Exception)
+                {
+
+                }
             }
         }
 
@@ -174,19 +206,19 @@ namespace canva
 
             switch (_colorMode.Get)
             {
-                case EColorMode.COLOR1: 
+                case EColorMode.COLOR1:
                     _pnlColor1.BackColor = color;
                     _tbColor1.Text = hex;
                     break;
-                case EColorMode.COLOR2: 
+                case EColorMode.COLOR2:
                     _pnlColor2.BackColor = color;
                     _tbColor2.Text = hex;
                     break;
-                case EColorMode.COLOR3: 
+                case EColorMode.COLOR3:
                     _pnlColor3.BackColor = color;
                     _tbColor3.Text = hex;
                     break;
-                case EColorMode.COLOR4: 
+                case EColorMode.COLOR4:
                     _pnlColor4.BackColor = color;
                     _tbColor4.Text = hex;
                     break;
@@ -234,6 +266,11 @@ namespace canva
 
                 _cnva.SetCursor(Cursors.Default);
 
+                _btnColor1.BackgroundImage = _btnBmps.Disabled1;
+                _btnColor2.BackgroundImage = _btnBmps.Disabled2;
+                _btnColor3.BackgroundImage = _btnBmps.Disabled3;
+                _btnColor4.BackgroundImage = _btnBmps.Disabled4;
+
             }
             else if (e.ColorMode == EColorMode.COLOR1)
             {
@@ -241,6 +278,12 @@ namespace canva
                 _btnColor2.Enabled = false;
                 _btnColor3.Enabled = false;
                 _btnColor4.Enabled = false;
+
+
+                _btnColor1.BackgroundImage = _btnBmps.Enabled1;
+                _btnColor2.BackgroundImage = _btnBmps.Disabled2;
+                _btnColor3.BackgroundImage = _btnBmps.Disabled3;
+                _btnColor4.BackgroundImage = _btnBmps.Disabled4;
 
 
                 _cnva.SetCursor(DripperToolCursor);
@@ -253,6 +296,12 @@ namespace canva
                 _btnColor3.Enabled = false;
                 _btnColor4.Enabled = false;
 
+
+                _btnColor1.BackgroundImage = _btnBmps.Disabled1;
+                _btnColor2.BackgroundImage = _btnBmps.Enabled2;
+                _btnColor3.BackgroundImage = _btnBmps.Disabled3;
+                _btnColor4.BackgroundImage = _btnBmps.Disabled4;
+
                 _cnva.SetCursor(DripperToolCursor);
 
             }
@@ -263,6 +312,12 @@ namespace canva
                 _btnColor3.Enabled = true;
                 _btnColor4.Enabled = false;
 
+
+                _btnColor1.BackgroundImage = _btnBmps.Disabled1;
+                _btnColor2.BackgroundImage = _btnBmps.Disabled2;
+                _btnColor3.BackgroundImage = _btnBmps.Enabled3;
+                _btnColor4.BackgroundImage = _btnBmps.Disabled4;
+
                 _cnva.SetCursor(DripperToolCursor);
             }
             else if (e.ColorMode == EColorMode.COLOR4)
@@ -271,6 +326,12 @@ namespace canva
                 _btnColor2.Enabled = false;
                 _btnColor3.Enabled = false;
                 _btnColor4.Enabled = true;
+
+
+                _btnColor1.BackgroundImage = _btnBmps.Disabled1;
+                _btnColor2.BackgroundImage = _btnBmps.Disabled2;
+                _btnColor3.BackgroundImage = _btnBmps.Disabled3;
+                _btnColor4.BackgroundImage = _btnBmps.Enabled4;
 
                 _cnva.SetCursor(DripperToolCursor);
             }
@@ -288,12 +349,12 @@ namespace canva
             //    _zoomBox.Visible = false;
             //    _cnva.MouseMove -= _cnva_MouseMove;
             //}
-            
+
         }
 
         private void _cnva_MouseMove(object? sender, MouseEventArgs e)
         {
-            
+
         }
 
 
@@ -337,7 +398,24 @@ namespace canva
 
         #endregion
 
-        
+
+        private void UpdateTextPosition()
+        {
+            Graphics g = this.CreateGraphics();
+            Double startingPoint = (this.Width / 2) - (g.MeasureString(this.Text.Trim(), this.Font).Width / 2);
+            Double widthOfASpace = g.MeasureString(" ", this.Font).Width;
+            String tmp = " ";
+            Double tmpWidth = 0;
+
+            while ((tmpWidth + widthOfASpace) < startingPoint)
+            {
+                tmp += " ";
+                tmpWidth += widthOfASpace;
+            }
+
+            this.Text = tmp + this.Text.Trim();
+        }
+
 
         #endregion
 
@@ -359,6 +437,8 @@ namespace canva
         private DateTime _copiedOverlayStart;
         private System.Timers.Timer _copiedOverlayTimer = new System.Timers.Timer();
 
+        private ButtonBitmaps _btnBmps;
+
         #endregion
 
         #region ENUM
@@ -368,6 +448,21 @@ namespace canva
         #endregion
 
         #endregion
+
+        private void _btnClose_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Are you sure you want to exit the app?", "Yes / No Please", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                Close();
+                Dispose();
+            }
+        }
+
+        private void _btnPaste_Click(object sender, EventArgs e)
+        {
+            _cnva.PasteClipboard();
+                
+        }
 
         private struct ColorMode
         {
@@ -384,7 +479,7 @@ namespace canva
                     {
                         ColorModeChanged?.Invoke(this, new ColorModeEventArgs(value));
                         _colorMode = value;
-                    
+
                     }
                 }
             }
@@ -403,6 +498,113 @@ namespace canva
 
         }
 
+
+    }
+
+
+    internal class ButtonBitmaps
+    {
+
+        public Bitmap Enabled1 { get { if (_enabled1 == null) throw new ArgumentNullException("Icon Is Null"); return (Bitmap)_enabled1; } }
+        public Bitmap Enabled2 { get { if (_enabled2 == null) throw new ArgumentNullException("Icon Is Null"); return (Bitmap)_enabled2; } }
+        public Bitmap Enabled3 { get { if (_enabled3 == null) throw new ArgumentNullException("Icon Is Null"); return (Bitmap)_enabled3; } }
+        public Bitmap Enabled4 { get { if (_enabled4 == null) throw new ArgumentNullException("Icon Is Null"); return (Bitmap)_enabled4; } }
+        public Bitmap Disabled1 { get { if (_disabled1 == null) throw new ArgumentNullException("Icon Is Null"); return (Bitmap)_disabled1; } }
+        public Bitmap Disabled2 { get { if (_disabled2 == null) throw new ArgumentNullException("Icon Is Null"); return (Bitmap)_disabled2; } }
+        public Bitmap Disabled3 { get { if (_disabled3 == null) throw new ArgumentNullException("Icon Is Null"); return (Bitmap)_disabled3; } }
+        public Bitmap Disabled4 { get { if (_disabled4 == null) throw new ArgumentNullException("Icon Is Null"); return (Bitmap)_disabled4; } }
+
+
+        //public static ButtonBitmaps Instance { get { return _instance; } }
+
+        public ButtonBitmaps()
+        {
+
+            try
+            {
+                _enabled1 = GetBitmapFromResource("canva.ico.ico1.ico");
+                _enabled2 = GetBitmapFromResource("canva.ico.ico2.ico");
+                _enabled3 = GetBitmapFromResource("canva.ico.ico3.ico");
+                _enabled4 = GetBitmapFromResource("canva.ico.ico4.ico");
+
+
+                _disabled1 = GetBitmapFromResource("canva.ico.ic01.ico");
+                _disabled2 = GetBitmapFromResource("canva.ico.ic02.ico");
+                _disabled3 = GetBitmapFromResource("canva.ico.ic03.ico");
+                _disabled4 = GetBitmapFromResource("canva.ico.ic04.ico");
+            }
+            catch { }
+
+
+        }
+
+
+        private Bitmap? GetBitmapFromResource(String resource)
+        {
+            Assembly asm = Assembly.GetExecutingAssembly();
+            using (Stream s = asm.GetManifestResourceStream(resource))
+            {
+                Icon ico = new Icon(s);
+                return ico.ToBitmap();
+            }
+
+        }
+
+
+
+        private Bitmap? _disabled1;
+        private Bitmap? _disabled2;
+        private Bitmap? _disabled3;
+        private Bitmap? _disabled4;
+
+        private Bitmap? _enabled1;
+        private Bitmap? _enabled2;
+        private Bitmap? _enabled3;
+        private Bitmap? _enabled4;
+
+        //private static ButtonBitmaps _instance = new ButtonBitmaps();
+
+    }
+
+
+    internal class CustomFont
+    {
+
+        public Font? font;
+
+        internal CustomFont()
+        {
+
+
+            Assembly asm = Assembly.GetExecutingAssembly();
+            using (Stream fontStream = asm.GetManifestResourceStream("canva.ttf.stencilla.ttf"))
+            {
+                if (fontStream != null)
+                {
+                    byte[] fontData = new byte[fontStream.Length];
+                    fontStream.Read(fontData, 0, (int)fontStream.Length);
+
+                    // Allocate memory and copy the font data
+                    IntPtr fontPtr = Marshal.AllocCoTaskMem(fontData.Length);
+                    Marshal.Copy(fontData, 0, fontPtr, fontData.Length);
+
+                    // Create the font collection
+                    PrivateFontCollection pfc = new PrivateFontCollection();
+                    pfc.AddMemoryFont(fontPtr, fontData.Length);
+
+                    // Free the memory
+                    Marshal.FreeCoTaskMem(fontPtr);
+
+                    // Use the font
+                    font = new Font(pfc.Families[0], 12f, FontStyle.Bold, GraphicsUnit.Pixel); // Set your desired size
+
+                }
+
+
+
+            }
+
+        }
 
     }
 
@@ -430,7 +632,7 @@ namespace canva
 
     public class OverlayForm : Form
     {
-        public string DisplayText = "Copied";
+        public string DisplayText = "El Copy";
         public float Scale = 1f;
         public float Alpha = 1f;
 
@@ -440,10 +642,12 @@ namespace canva
             this.ShowInTaskbar = false;
             this.TopMost = true;
             this.StartPosition = FormStartPosition.Manual;
-            this.BackColor = Color.LimeGreen; // fake key
-            this.TransparencyKey = Color.LimeGreen;
-            this.Width = 300;
-            this.Height = 100;
+            this.BackColor = Color.HotPink; // fake key
+            this.TransparencyKey = Color.HotPink;
+            this.Width = 500;
+            this.Height = 300;
+
+            
 
             this.DoubleBuffered = true;
         }
@@ -462,7 +666,14 @@ namespace canva
 
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
-            using (Font font = new Font("Segoe UI", 14 * Scale, FontStyle.Bold))
+
+            CustomFont cusFont = new CustomFont();
+
+
+            this.Font = cusFont.font;  // Apply to the form, or use for a specific control
+
+
+            using (Font font = cusFont.font)
             {
                 SizeF size = g.MeasureString(DisplayText, font);
                 PointF drawPt = new PointF(
@@ -476,6 +687,10 @@ namespace canva
                     g.DrawString(DisplayText, font, b, drawPt);
                 }
             }
+                
+
+
+            
         }
     }
 

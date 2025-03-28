@@ -153,6 +153,11 @@ namespace canva
 
         }
 
+        public void PasteClipboard()
+        {
+            PasteImage();
+        }
+
         private void PasteImage()
         {
             if (Clipboard.ContainsImage())

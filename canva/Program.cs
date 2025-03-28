@@ -1,4 +1,4 @@
-using LOG = Logger;
+
 
 namespace canva
 {
@@ -20,15 +20,6 @@ namespace canva
         }
 
 
-        public static LOG.Logger Log
-        {
-            get
-            {
-                if (LOG.Logger.LogBooks.ContainsKey(LOG.ENUM.ELogBook.MAIN)) return LOG.Logger.LogBooks[LOG.ENUM.ELogBook.MAIN];
-
-                throw new KeyNotFoundException($"Main Logbook Not Found");
-            }
-        }
 
 
 

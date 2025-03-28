@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace canva
 {
-    internal class CustomCursor
+    internal class CustomIcon
     {
-        internal static CustomCursor Instance { get { return _instance; } }
+        internal static CustomIcon Instance { get { return _instance; } }
 
-        private CustomCursor()
+        private CustomIcon()
         {
 
         }
@@ -40,7 +40,7 @@ namespace canva
 
         }
 
-        private static CustomCursor _instance = new CustomCursor();
+        private static CustomIcon _instance = new CustomIcon();
 
 
 
