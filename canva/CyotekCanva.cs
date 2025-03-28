@@ -99,15 +99,15 @@ namespace canva
         {
             if (e.Button == MouseButtons.Right)
             {
-                if (UserInterface.Instance.GetColorMode != ENUM.EColorMode.NO_IMG && UserInterface.Instance.GetColorMode != ENUM.EColorMode.NONE)
+                if (UCCanva.Instance.GetColorMode != ENUM.EColorMode.NO_IMG && UCCanva.Instance.GetColorMode != ENUM.EColorMode.NONE)
                 {
-                    UserInterface.Instance.SetColorModeNone();
+                    UCCanva.Instance.SetColorModeNone();
                 }
             }
 
 
 
-            if (e.Button == MouseButtons.Left && UserInterface.Instance.GetColorMode != ENUM.EColorMode.NONE && this.Image != null)
+            if (e.Button == MouseButtons.Left && UCCanva.Instance.GetColorMode != ENUM.EColorMode.NONE && this.Image != null)
             {
                 Point imgPt = this.PointToImage(e.Location);
 
@@ -169,7 +169,7 @@ namespace canva
                 {
                     this.Image = image;
 
-                    UserInterface.Instance.ImageLoaded = true;
+                    UCCanva.Instance.ImageLoaded = true;
                 }
             }
             else

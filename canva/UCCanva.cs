@@ -9,15 +9,60 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace canva
 {
-    public partial class UserInterface : Form
+    public partial class UCCanva : Form
     {
+
+        // P/Invoke declarations
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetWindowDC(IntPtr hWnd);
+
+        [DllImport("user32.dll")]
+        private static extern int ReleaseDC(IntPtr hWnd, IntPtr hDC);
+
+        private const int WM_NCPAINT = 0x85;
+        private const int WM_SETTEXT = 0x000C;
+
+        protected override void WndProc(ref Message m)
+        {
+            base.WndProc(ref m);
+
+            if (m.Msg == WM_NCPAINT)
+            {
+                // Get the device context for the window’s non-client area
+                IntPtr hDC = GetWindowDC(this.Handle);
+                if (hDC != IntPtr.Zero)
+                {
+                    using (Graphics g = Graphics.FromHdc(hDC))
+                    {
+                        // Prepare title text settings
+                        string title = this.Text;
+                        Font titleFont = this.Font; // You might choose a different font
+                        SizeF textSize = g.MeasureString(title, titleFont);
+
+                        // Calculate the center position of the title bar
+                        int x = (this.Width - (int)textSize.Width) / 2;
+                        // The Y value might need tweaking depending on the OS and theme
+                        int y = 5;
+
+                        // Clear the area (optional, depending on your needs)
+                        // g.FillRectangle(SystemBrushes.ActiveCaption, new Rectangle(x, y, (int)textSize.Width, (int)textSize.Height));
+
+                        // Draw the title text
+                        g.DrawString(title, titleFont, SystemBrushes.ActiveCaptionText, x, y);
+                    }
+                    ReleaseDC(this.Handle, hDC);
+                }
+            }
+            // Handle WM_SETTEXT if needed to update the caption on text change
+        }
+
         #region PUBLIC
 
         #region VARIABLES
 
         #region STATIC
 
-        public static UserInterface Instance { get { return _instance; } }
+        public static UCCanva Instance { get { return _instance; } }
 
         #endregion
 
@@ -36,13 +81,11 @@ namespace canva
 
         #endregion
 
-
-
         #region PRIVATE
 
         #region CONSTRUCTORS
 
-        private UserInterface()
+        private UCCanva()
         {
             InitializeComponent();
 
@@ -371,7 +414,9 @@ namespace canva
         private void UserInterface_Load(object? sender, EventArgs e)
         {
 
-            _dripperTool = CustomCursor.Instance.LoadCustomCursor("canva.Cursors.dropper.png", 0, 23);
+            //_dripperTool = CustomCursor.Instance.LoadCustomCursor("canva.Cursors.dropper.png", 0, 23);
+            _dripperTool = CustomCursor.Instance.LoadCustomCursor("canva.Icons.drip_drip_4.png", 5, 25);
+
 
             //_dripperTool = CustomCursor.CreateCursorFromBitmap(new Bitmap("Cursors/dripper.png"), 2, 2);
 
@@ -423,7 +468,7 @@ namespace canva
 
         #region STATIC
 
-        private static UserInterface _instance = new UserInterface();
+        private static UCCanva _instance = new UCCanva();
 
         #endregion
 

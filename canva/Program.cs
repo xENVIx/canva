@@ -1,5 +1,7 @@
 
 
+using canva.DAT;
+
 namespace canva
 {
     internal static class Program
@@ -15,8 +17,9 @@ namespace canva
             ApplicationConfiguration.Initialize();
 
             //LOG.Logger.OnInit("");
+            Config.OnInit();
 
-            Application.Run(UserInterface.Instance);
+            Application.Run(UCCanva.Instance);
         }
 
 

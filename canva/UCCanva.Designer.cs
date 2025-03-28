@@ -2,7 +2,7 @@
 
 namespace canva
 {
-    partial class UserInterface
+    partial class UCCanva
     {
         /// <summary>
         ///  Required designer variable.
