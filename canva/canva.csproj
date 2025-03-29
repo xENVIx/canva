@@ -6,16 +6,66 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationIcon>ico\duck1.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="UCCanva.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Remove="Cursors\Cursor38.cur" />
     <None Remove="Cursors\dropper.png" />
+    <None Remove="Icons\drip_drip_4.png" />
+    <None Remove="Icons\ic01.png" />
+    <None Remove="Icons\ic02.png" />
+    <None Remove="Icons\ic03.png" />
+    <None Remove="Icons\ic04.png" />
+    <None Remove="Icons\ico1.png" />
+    <None Remove="Icons\ico2.png" />
+    <None Remove="Icons\ico3.png" />
+    <None Remove="Icons\ico4.png" />
+    <None Remove="ico\duck.ico" />
+    <None Remove="ico\ic01.ico" />
+    <None Remove="ico\ic02.ico" />
+    <None Remove="ico\ic03.ico" />
+    <None Remove="ico\ic04.ico" />
+    <None Remove="ico\ico1.ico" />
+    <None Remove="ico\ico2.ico" />
+    <None Remove="ico\ico3.ico" />
+    <None Remove="ico\ico4.ico" />
+    <None Remove="ttf\stencilla.ttf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Icons\drip_drip_4.png" />
+    <EmbeddedResource Include="ico\duck1.ico" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Cursors\Cursor38.cur" />
     <EmbeddedResource Include="Cursors\dropper.png" />
+    <EmbeddedResource Include="Icons\ic01.png" />
+    <EmbeddedResource Include="Icons\ic02.png" />
+    <EmbeddedResource Include="Icons\ic03.png" />
+    <EmbeddedResource Include="Icons\ic04.png" />
+    <EmbeddedResource Include="Icons\ico2.png" />
+    <EmbeddedResource Include="Icons\ico3.png" />
+    <EmbeddedResource Include="Icons\ico4.png" />
+    <EmbeddedResource Include="ico\duck.ico" />
+    <EmbeddedResource Include="ico\ic01.ico" />
+    <EmbeddedResource Include="ico\ic02.ico" />
+    <EmbeddedResource Include="ico\ic03.ico" />
+    <EmbeddedResource Include="ico\ic04.ico" />
+    <EmbeddedResource Include="ico\ico1.ico" />
+    <EmbeddedResource Include="ico\ico2.ico" />
+    <EmbeddedResource Include="ico\ico3.ico" />
+    <EmbeddedResource Include="ico\ico4.ico" />
+    <EmbeddedResource Include="ttf\stencilla.ttf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="CustomIcons.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,8 +73,30 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Icons\ico1.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\LibUI\LibUI\LibUI.csproj" />
     <ProjectReference Include="..\..\LibUtil\LibUtil\LibUtil.csproj" />
-    <ProjectReference Include="..\..\Logger_8.0\Logger.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="UI_ELEMENTS\UCCommand.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

@@ -1,9 +1,16 @@
-using LOG = Logger;
+
+
+using canva.DAT;
+
+using canva.UI_ELEMENTS;
+using LibUI;
+using System.Diagnostics;
 
 namespace canva
 {
     internal static class Program
     {
+
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>
@@ -14,26 +21,53 @@ namespace canva
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
 
-            //LOG.Logger.OnInit("");
-
-            Application.Run(UserInterface.Instance);
-        }
-
-
-        public static LOG.Logger Log
-        {
-            get
+            try
             {
-                if (LOG.Logger.LogBooks.ContainsKey(LOG.ENUM.ELogBook.MAIN)) return LOG.Logger.LogBooks[LOG.ENUM.ELogBook.MAIN];
+                //LOG.Logger.OnInit("");
+                string appDataLocalPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                string appName = $"{Process.GetCurrentProcess().ProcessName.Replace(" ", "_")}";
 
-                throw new KeyNotFoundException($"Main Logbook Not Found");
+                appDataFolder = Path.Combine(appDataLocalPath, appName);
+
+
+                Config.OnInit();
+
+                UserInterface.OnInit();
+
+
             }
+            catch (Exception ex)
+            {
+                MyMessageBox.ShowError($"Fatal Error During App Initialization: {ex.Message}");
+                return;
+            }
+
+
+            do
+            {
+
+                if (ToggleAppOrient)
+                {
+
+                    UserInterface.ToggleAppOrient();
+                    UserInterface.PostInit();
+
+                    ToggleAppOrient = false;
+                }
+
+                Application.Run(UserInterface.Instance);
+
+            } while (ToggleAppOrient);
+
         }
 
 
 
+
+        public static String appDataFolder = "";
         public static bool Debug = false;
 
+        public static bool ToggleAppOrient = false;
 
 
 
