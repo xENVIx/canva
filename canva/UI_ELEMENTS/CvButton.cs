@@ -13,12 +13,15 @@ namespace canva.UI_ELEMENTS
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override Color BackColor { get { return base.BackColor; }  set {  } }
+        public override Color ForeColor { get { return base.ForeColor; } set { } }
 
 
         public CvButton() : base()
         {
 
             base.BackColor = DAT.Config.Instance.ForegroundColor;
+
+            base.ForeColor = DAT.Config.Instance.TextColor;
 
         }
 

@@ -34,6 +34,7 @@ namespace canva.DAT
         [DataMember] public String AppBackgroundColor { get { return _appColor; } set { _appColor = value; } }
         [DataMember] public String AppTitle { get { return _appTitle; } set { _appTitle = value; } }
         [DataMember] public bool ShowWarnings { get { return _showWarnings; } set { _showWarnings = value; } }
+        [DataMember] public String AppTextColor { get { return _appTextColor; } set { _appTextColor = value; } }
 
         #endregion
 
@@ -76,6 +77,26 @@ namespace canva.DAT
 
             }
 
+        }
+
+        public Color TextColor
+        {
+            get
+            {
+                try
+                {
+                    if (IsValidHexColor(_appTextColor))
+                    {
+                        return HexToColor(_appTextColor);
+                    }
+                    else return HexToColor("#000000");
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
+
+            }
         }
 
         #endregion
@@ -175,6 +196,8 @@ namespace canva.DAT
 
         // 220, 255, 255
         private String _appColor = "#DCFFFF";
+        private String _appTextColor = "#000000";
+
 
         private String _appTitle = "♥ C A N V A ♥";
 
