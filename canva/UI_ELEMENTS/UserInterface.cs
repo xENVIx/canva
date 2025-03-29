@@ -1,4 +1,5 @@
-﻿using canva.DAT;
+﻿using canva.Classes;
+using canva.DAT;
 using canva.ENUM;
 using LibUI;
 using System;
@@ -51,20 +52,42 @@ namespace canva.UI_ELEMENTS
 
         public static void OnInit()
         {
-            EAppOrientation appOrient = new EAppOrientation();
+
 
             if (Config.Instance == null)
-                appOrient = EAppOrientation.HORIZONTAL;
-            else appOrient = Config.Instance.AppOrientation;
+                _appOrient = EAppOrientation.HORIZONTAL;
+            else _appOrient = Config.Instance.AppOrientation;
 
 
-            switch (appOrient)
+            switch (_appOrient)
             {
                 case EAppOrientation.HORIZONTAL: _instance = new UserInterfaceHoriz(); break;
                 case EAppOrientation.VERTICAL: _instance = new UserInterfaceVert(); break;
                 default: _instance = new UserInterfaceHoriz(); break;
             }
 
+        }
+
+        public static void PostInit()
+        {
+            switch (_appOrient)
+            {
+                case EAppOrientation.HORIZONTAL: _instance = new UserInterfaceHoriz(); break;
+                case EAppOrientation.VERTICAL: _instance = new UserInterfaceVert(); break;
+                default: throw new Exception();
+            }
+        }
+
+        public static void ToggleAppOrient()
+        {
+            switch (_appOrient)
+            {
+                case EAppOrientation.HORIZONTAL: _appOrient = EAppOrientation.VERTICAL; break;
+                case EAppOrientation.VERTICAL: _appOrient = EAppOrientation.HORIZONTAL; break;
+
+                default: throw new Exception("Could not toggle app orientation");
+                    
+            }
         }
 
         #endregion
@@ -103,6 +126,88 @@ namespace canva.UI_ELEMENTS
 
             this._btnPaste.Click += _btnPaste_Click;
             this._btnClose.Click += _btnClose_Click;
+
+
+            this._ucCnva.ColorPicked += _ucCnva_ColorPicked;
+
+            this._ucCmd.OpenMenu += _ucCmd_OpenMenu;
+
+
+            ToolStripMenuItem op1 = new ToolStripMenuItem("Open AppData Folder");
+            op1.Click += Op1_Click;
+            _cmsOptions.Items.Add(op1);
+
+            ToolStripMenuItem op2 = new ToolStripMenuItem("Paste Clipboard");
+            op2.Click += Op2_Click;
+            _cmsOptions.Items.Add(op2);
+
+
+            ToolStripMenuItem op3 = new ToolStripMenuItem("Toggle Orientation");
+            op3.Click += Op3_Click;
+            _cmsOptions.Items.Add(op3);
+        }
+
+        private void Op3_Click(object? sender, EventArgs e)
+        {
+
+            _cmsOptions.Hide();
+
+            Program.ToggleAppOrient = true;
+
+            base.Close();
+            base.Dispose();
+
+            return;
+
+        }
+
+
+
+
+
+
+
+        #endregion
+
+        #endregion
+
+        #region PROTECTED
+
+
+
+        #endregion
+
+        #region PRIVATE
+
+        #region METHODS
+
+        #region EVENTS
+
+
+        private void Op2_Click(object? sender, EventArgs e)
+        {
+            PasteClipboard();
+            _cmsOptions.Close();
+
+        }
+        private void Op1_Click(object? sender, EventArgs e)
+        {
+
+            LibUtil.DirectoryUtl.OpenDirectory(Program.appDataFolder, "Config.xml");
+
+            _cmsOptions.Hide();
+        }
+
+        private void _ucCmd_OpenMenu(object? sender, OpenMenuEventArgs e)
+        {
+
+            _cmsOptions.Show(e.MouseLocation);
+
+        }
+
+        private void _ucCnva_ColorPicked(object? sender, Classes.ColorPickedEventArgs e)
+        {
+            _ucCmd.ColorPicked(e.PickedColor, e.ImageCoordinates);
         }
 
         private void _btnClose_Click(object? sender, EventArgs e)
@@ -120,6 +225,22 @@ namespace canva.UI_ELEMENTS
         private void _btnPaste_Click(object? sender, EventArgs e)
         {
 
+            PasteClipboard();
+
+        }
+        private void FrmMain_Load(object? sender, EventArgs e)
+        {
+
+            if (Program.Debug)
+                DbgWindow.Instance.Show();
+
+        }
+
+
+        #endregion
+
+        private void PasteClipboard()
+        {
             if (Clipboard.ContainsImage())
             {
                 Image? image = Clipboard.GetImage();
@@ -141,37 +262,7 @@ namespace canva.UI_ELEMENTS
                 if (Config.Instance.ShowWarnings)
                     MyMessageBox.ShowWarning("The clipboard does not contain an image");
             }
-
         }
-
-
-
-        #endregion
-
-        #endregion
-
-        #region PROTECTED
-
-
-
-        #endregion
-
-        #region PRIVATE
-
-        #region METHODS
-
-        #region EVENTS
-
-        private void FrmMain_Load(object? sender, EventArgs e)
-        {
-
-            if (Program.Debug)
-                DbgWindow.Instance.Show();
-
-        }
-
-
-        #endregion
 
         #endregion
 
@@ -180,6 +271,7 @@ namespace canva.UI_ELEMENTS
         #region STATIC
 
         private static UserInterface _instance;
+        private static EAppOrientation _appOrient;
 
         #endregion
 

@@ -6,21 +6,25 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace canva
+namespace canva.Classes
 {
     internal class CustomCursor
     {
         internal static CustomCursor Instance { get { return _instance; } }
 
+        public Cursor DripperTool { get { if (_dripperTool == null) return Cursors.Default; return _dripperTool; } }
+
+
         private CustomCursor()
         {
+            _dripperTool = LoadCustomCursor("canva.Icons.drip_drip_4.png", 5, 25);
 
         }
 
 
 
 
-        internal Cursor LoadCustomCursor(String resourceName, int xHotSpot, int yHotSpot)
+        internal Cursor LoadCustomCursor(string resourceName, int xHotSpot, int yHotSpot)
         {
 
             var asm = Assembly.GetExecutingAssembly();
@@ -40,6 +44,9 @@ namespace canva
 
         }
 
+
+        private Cursor _dripperTool;
+
         private static CustomCursor _instance = new CustomCursor();
 
 
@@ -52,15 +59,15 @@ namespace canva
             public bool fIcon;
             public int xHotspot;
             public int yHotspot;
-            public IntPtr hbmMask;
-            public IntPtr hbmColor;
+            public nint hbmMask;
+            public nint hbmColor;
         }
 
         [DllImport("user32.dll")]
-        static extern IntPtr CreateIconIndirect(ref ICONINFO icon);
+        static extern nint CreateIconIndirect(ref ICONINFO icon);
 
         [DllImport("gdi32.dll")]
-        static extern bool DeleteObject(IntPtr hObject);
+        static extern bool DeleteObject(nint hObject);
 
         public Cursor CreateCursorFromBitmap(Bitmap bmp, int xHotspot, int yHotspot)
         {
@@ -71,7 +78,7 @@ namespace canva
             icon.hbmColor = bmp.GetHbitmap(Color.FromArgb(0, 0, 0, 0)); // Preserve alpha
             icon.hbmMask = bmp.GetHbitmap(); // Not ideal, but gets around some bugs
 
-            IntPtr ptr = CreateIconIndirect(ref icon);
+            nint ptr = CreateIconIndirect(ref icon);
             return new Cursor(ptr);
         }
 

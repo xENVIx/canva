@@ -4,6 +4,7 @@ using canva.DAT;
 
 using canva.UI_ELEMENTS;
 using LibUI;
+using System.Diagnostics;
 
 namespace canva
 {
@@ -23,6 +24,12 @@ namespace canva
             try
             {
                 //LOG.Logger.OnInit("");
+                string appDataLocalPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                string appName = $"{Process.GetCurrentProcess().ProcessName.Replace(" ", "_")}";
+
+                appDataFolder = Path.Combine(appDataLocalPath, appName);
+
+
                 Config.OnInit();
 
                 UserInterface.OnInit();
@@ -36,18 +43,31 @@ namespace canva
             }
 
 
+            do
+            {
 
-            Application.Run(UserInterface.Instance);
+                if (ToggleAppOrient)
+                {
+
+                    UserInterface.ToggleAppOrient();
+                    UserInterface.PostInit();
+
+                    ToggleAppOrient = false;
+                }
+
+                Application.Run(UserInterface.Instance);
+
+            } while (ToggleAppOrient);
 
         }
 
 
 
 
-
+        public static String appDataFolder = "";
         public static bool Debug = false;
 
-
+        public static bool ToggleAppOrient = false;
 
 
 

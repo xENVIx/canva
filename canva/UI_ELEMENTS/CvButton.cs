@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,10 +10,15 @@ namespace canva.UI_ELEMENTS
     public class CvButton : Button
     {
 
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public override Color BackColor { get { return base.BackColor; }  set {  } }
+
+
         public CvButton() : base()
         {
 
-            this.BackColor = DAT.Config.Instance.BackgroundColor;
+            base.BackColor = DAT.Config.Instance.ForegroundColor;
 
         }
 

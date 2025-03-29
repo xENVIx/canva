@@ -18,17 +18,7 @@ using canva.Classes;
 namespace canva.UI_ELEMENTS
 {
 
-    public class ColorPickedEventArgs : EventArgs
-    {
-        public Color PickedColor { get; }
-        public Point ImageCoordinates { get; }
-
-        public ColorPickedEventArgs(Color color, Point coords)
-        {
-            PickedColor = color;
-            ImageCoordinates = coords;
-        }
-    }
+    
 
     public partial class CyotekCanva : ImageBox
     {
@@ -44,7 +34,7 @@ namespace canva.UI_ELEMENTS
             Cursor = _curCur;
 
 
-            CursorChanged += CyotekCanva_CursorChanged;
+
 
         }
 
@@ -77,15 +67,67 @@ namespace canva.UI_ELEMENTS
             MouseUp += CyotekCanva_MouseUp;
 
 
+            MouseMove += CyotekCanva_MouseMove;
+
+
             Scroll += CyotekCanva_Scroll;
+
+
+
+            Classes.ColorMode.Instance.ColorModeChanged += Instance_ColorModeChanged;
+
+        }
+
+        private void CyotekCanva_MouseMove(object? sender, MouseEventArgs e)
+        {
+
+            if (_scrolling) this.Cursor = _curCur;
 
 
 
         }
 
+        private void Instance_ColorModeChanged(object? sender, ColorModeEventArgs e)
+        {
+
+            switch (e.ColorMode)
+            {
+                case ENUM.EColorMode.NO_IMG:
+                case ENUM.EColorMode.NONE:
+                    SetCursor(Cursors.Default);
+                    break;
+                default: SetCursor(Classes.CustomCursor.Instance.DripperTool); break;
+
+            }
+
+        }
+
         private void CyotekCanva_MouseUp(object? sender, MouseEventArgs e)
         {
+
             Cursor = _curCur;
+             if (e.Button == MouseButtons.Left)
+            {
+
+                if (_scrolling)
+                {
+                    _scrolling = false;
+                }
+                else if (Classes.ColorMode.Instance.GetColorMode != ENUM.EColorMode.NONE && Image != null)
+                {
+                    Point imgPt = PointToImage(e.Location);
+
+                    if (imgPt.X >= 0 && imgPt.Y >= 0 && imgPt.X < Image.Width && imgPt.Y < Image.Height)
+                    {
+                        Bitmap bmp = (Bitmap)Image;
+                        Color picked = bmp.GetPixel(imgPt.X, imgPt.Y);
+                        ColorPicked?.Invoke(this, new ColorPickedEventArgs(picked, imgPt));
+                    }
+
+                }
+            }
+
+
         }
 
         private void CyotekCanva_Scroll(object? sender, ScrollEventArgs e)
@@ -93,7 +135,7 @@ namespace canva.UI_ELEMENTS
             //throw new NotImplementedException();
 
             _scrolling = true;
-            _scrollCursor = Cursor;
+            //_scrollCursor = Cursor;
 
 
         }
@@ -110,18 +152,7 @@ namespace canva.UI_ELEMENTS
 
 
 
-            if (e.Button == MouseButtons.Left && Classes.ColorMode.Instance.GetColorMode != ENUM.EColorMode.NONE && Image != null)
-            {
-                Point imgPt = PointToImage(e.Location);
-
-                if (imgPt.X >= 0 && imgPt.Y >= 0 && imgPt.X < Image.Width && imgPt.Y < Image.Height)
-                {
-                    Bitmap bmp = (Bitmap)Image;
-                    Color picked = bmp.GetPixel(imgPt.X, imgPt.Y);
-                    ColorPicked?.Invoke(this, new ColorPickedEventArgs(picked, imgPt));
-                }
-
-            }
+            
         }
 
         protected override void OnMouseDown(MouseEventArgs e)

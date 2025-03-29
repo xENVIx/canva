@@ -17,6 +17,12 @@ namespace canva.UI_ELEMENTS
 
         #region PUBLIC
 
+        #region EVENTS
+
+        public event EventHandler<ColorPickedEventArgs>? ColorPicked;
+
+        #endregion
+
         #region METHODS
 
         public void PasteClipboard(Image clipboardImg)
@@ -32,6 +38,13 @@ namespace canva.UI_ELEMENTS
         {
             InitializeComponent();
 
+            this._cnva.ColorPicked += _cnva_ColorPicked;
+
+        }
+
+        private void _cnva_ColorPicked(object? sender, ColorPickedEventArgs e)
+        {
+            ColorPicked?.Invoke(this, e);
         }
 
 

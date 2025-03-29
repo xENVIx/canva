@@ -28,19 +28,21 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             _ucCnva = new UCCanva();
             _ucCmd = new UCCommand();
             _pnlCtrls = new Panel();
             _pnlBtns = new Panel();
             _btnClose = new CvButton();
             _btnPaste = new CvButton();
+            _cmsOptions = new ContextMenuStrip(components);
             _pnlCtrls.SuspendLayout();
             _pnlBtns.SuspendLayout();
             SuspendLayout();
             // 
             // _ucCnva
             // 
-            _ucCnva.BackColor = Color.Azure;
+            _ucCnva.BackColor = Color.FromArgb(220, 255, 255);
             _ucCnva.Dock = DockStyle.Fill;
             _ucCnva.Location = new Point(0, 0);
             _ucCnva.Name = "_ucCnva";
@@ -94,6 +96,11 @@
             _btnPaste.Text = "Paste Image";
             _btnPaste.UseVisualStyleBackColor = false;
             // 
+            // _cmsOptions
+            // 
+            _cmsOptions.Name = "contextMenuStrip1";
+            _cmsOptions.Size = new Size(61, 4);
+            // 
             // UserInterface
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -119,5 +126,6 @@
         protected Panel _pnlBtns;
         protected UI_ELEMENTS.CvButton _btnClose;
         protected UI_ELEMENTS.CvButton _btnPaste;
+        private ContextMenuStrip _cmsOptions;
     }
 }
