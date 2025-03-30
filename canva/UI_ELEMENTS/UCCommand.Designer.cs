@@ -38,10 +38,10 @@ namespace canva.UI_ELEMENTS
             _pnlColor2 = new Panel();
             _pnlColor3 = new Panel();
             _pnlColor4 = new Panel();
-            _tbColor1 = new TextBox();
-            _tbColor2 = new TextBox();
-            _tbColor3 = new TextBox();
-            _tbColor4 = new TextBox();
+            _tbColor1 = new CvTextBox();
+            _tbColor2 = new CvTextBox();
+            _tbColor3 = new CvTextBox();
+            _tbColor4 = new CvTextBox();
             SuspendLayout();
             // 
             // _btnColor1
@@ -49,9 +49,6 @@ namespace canva.UI_ELEMENTS
             //_btnColor1.BackColor = Color.Azure;
             _btnColor1.BackColor = DAT.Config.Instance.ForegroundColor;
             _btnColor1.BackgroundImageLayout = ImageLayout.Center;
-            _btnColor1.FlatAppearance.BorderColor = Color.FromArgb(255, 235, 255);
-            _btnColor1.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 128, 255);
-            _btnColor1.FlatAppearance.MouseOverBackColor = Color.FromArgb(192, 192, 255);
             _btnColor1.Location = new Point(3, 3);
             _btnColor1.Name = "_btnColor1";
             _btnColor1.Size = new Size(34, 34);
@@ -197,9 +194,9 @@ namespace canva.UI_ELEMENTS
         private Panel _pnlColor2;
         private Panel _pnlColor3;
         private Panel _pnlColor4;
-        private TextBox _tbColor1;
-        private TextBox _tbColor2;
-        private TextBox _tbColor3;
-        private TextBox _tbColor4;
+        private CvTextBox _tbColor1;
+        private CvTextBox _tbColor2;
+        private CvTextBox _tbColor3;
+        private CvTextBox _tbColor4;
     }
 }

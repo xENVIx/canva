@@ -145,7 +145,28 @@ namespace canva.UI_ELEMENTS
             ToolStripMenuItem op3 = new ToolStripMenuItem("Toggle Orientation");
             op3.Click += Op3_Click;
             _cmsOptions.Items.Add(op3);
+
+            ToolStripMenuItem op4 = new ToolStripMenuItem("Load Previous Image...");
+            op4.Click += Op4_Click;
+            _cmsOptions.Items.Add(op4);
+
+            ToolStripMenuItem op5 = new ToolStripMenuItem("Load Next Image...");
+            op5.Click += Op5_Click;
+            _cmsOptions.Items.Add(op5);
         }
+
+        private void Op5_Click(object? sender, EventArgs e)
+        {
+            _ucCnva.PasteClipboard(SavedImages.Instance.GetNextImage.ImageFile);
+        }
+
+        private void Op4_Click(object? sender, EventArgs e)
+        {
+
+            _ucCnva.PasteClipboard(SavedImages.Instance.GetPreviousImage.ImageFile);
+        }
+
+
 
         private void Op3_Click(object? sender, EventArgs e)
         {
@@ -248,7 +269,9 @@ namespace canva.UI_ELEMENTS
                 if (image != null)
                 {
 
-                    _ucCnva.PasteClipboard(image);
+                    _ucCnva.PasteClipboard(SavedImages.Instance.LoadNewImage(new SavedImages.ImageSave((Image)image)));
+
+                    //_ucCnva.PasteClipboard(image);
 
                 }
                 else

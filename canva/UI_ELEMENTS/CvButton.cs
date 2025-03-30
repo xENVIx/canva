@@ -15,6 +15,10 @@ namespace canva.UI_ELEMENTS
         public override Color BackColor { get { return base.BackColor; }  set {  } }
         public override Color ForeColor { get { return base.ForeColor; } set { } }
 
+        public FlatStyle FlatStyle { get { return base.FlatStyle; } set { } }
+
+        public FlatButtonAppearance FlatAppearance { get { return base.FlatAppearance; } set { } }
+
 
         public CvButton() : base()
         {
@@ -23,6 +27,21 @@ namespace canva.UI_ELEMENTS
 
             base.ForeColor = DAT.Config.Instance.TextColor;
 
+            base.FlatStyle = FlatStyle.Flat;
+
+
+
+        }
+
+
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            base.OnHandleCreated(e);
+            base.FlatStyle = FlatStyle.Flat; // Reassert control
+
+            base.FlatAppearance.MouseDownBackColor = Color.HotPink;
+            base.FlatAppearance.MouseOverBackColor = Color.Cyan;
+            base.FlatAppearance.BorderColor = DAT.Config.Instance.ForegroundColor;
         }
 
 

@@ -72,6 +72,8 @@ namespace canva.UI_ELEMENTS
 
             Scroll += CyotekCanva_Scroll;
 
+            
+
 
 
             Classes.ColorMode.Instance.ColorModeChanged += Instance_ColorModeChanged;
@@ -81,9 +83,16 @@ namespace canva.UI_ELEMENTS
         private void CyotekCanva_MouseMove(object? sender, MouseEventArgs e)
         {
 
-            if (_scrolling) this.Cursor = _curCur;
-
-
+            switch (Classes.ColorMode.Instance.Get)
+            {
+                case ENUM.EColorMode.NO_IMG:
+                case ENUM.EColorMode.NONE:
+                    this.Cursor = Cursors.Default;
+                    break;
+                default:
+                    this.Cursor = Classes.CustomCursor.Instance.DripperTool;
+                    break;
+            }
 
         }
 
@@ -136,6 +145,17 @@ namespace canva.UI_ELEMENTS
 
             _scrolling = true;
             //_scrollCursor = Cursor;
+
+            switch (Classes.ColorMode.Instance.Get)
+            {
+                case ENUM.EColorMode.NO_IMG:
+                case ENUM.EColorMode.NONE:
+                    this.Cursor = Cursors.Default;
+                    break;
+                default:
+                    this.Cursor = Classes.CustomCursor.Instance.DripperTool;
+                    break;
+            }
 
 
         }
@@ -196,7 +216,8 @@ namespace canva.UI_ELEMENTS
 
                 if (img == null) return;
 
-                PasteImage(img);
+
+                PasteImage(Classes.SavedImages.Instance.LoadNewImage(new SavedImages.ImageSave((Image)img)));
             }
         }
 
@@ -204,6 +225,10 @@ namespace canva.UI_ELEMENTS
         public void PasteImage(Image img)
         {
             
+            
+
+
+
             Image = img;
 
             UserInterface.Instance.ImageLoaded = true;

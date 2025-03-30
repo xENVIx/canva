@@ -35,6 +35,7 @@ namespace canva.DAT
         [DataMember] public String AppTitle { get { return _appTitle; } set { _appTitle = value; } }
         [DataMember] public bool ShowWarnings { get { return _showWarnings; } set { _showWarnings = value; } }
         [DataMember] public String AppTextColor { get { return _appTextColor; } set { _appTextColor = value; } }
+        [DataMember] public int ConfigVersion { get { return _configVers; } set { _configVers = value; } }
 
         #endregion
 
@@ -99,6 +100,15 @@ namespace canva.DAT
             }
         }
 
+        public bool ConfigVersMatch
+        {
+            get
+            {
+                if (_configVers == _vers) return true;
+                else return false;
+            }
+        }
+
         #endregion
 
 
@@ -121,11 +131,30 @@ namespace canva.DAT
                 XML.SetFilePath = appDataPath;
 
                 object data;
+
+                bool bSerializeNew = true;
+
+                
                 if (XML.DeserializeXML(out data, typeof(Config)))
                 {
                     _instance = (Config)data;
+
+                    if (_instance.ConfigVersMatch) bSerializeNew = false;
+                    else _instance = new Config();
+
+
+
+                    if (_instance.CheckForNull())
+                    {
+                        bSerializeNew = true;
+                        _instance = new Config();
+                    }
+
                 }
-                else
+                
+
+
+                if (bSerializeNew || _instance.CheckForNull())
                 {
 
                     try
@@ -197,12 +226,11 @@ namespace canva.DAT
         // 220, 255, 255
         private String _appColor = "#DCFFFF";
         private String _appTextColor = "#000000";
-
-
         private String _appTitle = "♥ C A N V A ♥";
-
-
         private bool _showWarnings = true;
+        private int _configVers = _vers;
+
+        private const int _vers = 2;
 
         #endregion
 
@@ -236,6 +264,14 @@ namespace canva.DAT
         }
 
         #endregion
+
+        private bool CheckForNull()
+        {
+            if (_appColor == null || _appTextColor == null || _appTitle == null) return true;
+
+
+            return false;
+        }
 
         #endregion
 

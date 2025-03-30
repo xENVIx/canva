@@ -63,7 +63,8 @@ namespace canva.UI_ELEMENTS
 
             ColorMode.Instance.ColorModeChanged += Instance_ColorModeChanged;
 
-            DisableAllButtons();
+
+            UpdateColorMode(ColorMode.Instance.Get);
 
 
             this._btnColor1.MouseClick += _btnColor1_Click;
@@ -244,14 +245,7 @@ namespace canva.UI_ELEMENTS
         private void Instance_ColorModeChanged(object? sender, ColorModeEventArgs e)
         {
 
-            if (e.ColorMode == null) return;
-
-            switch (e.ColorMode)
-            {
-                case EColorMode.NO_IMG: DisableAllButtons(); break;
-                default: EnableButtonByMode((EColorMode)e.ColorMode); break;
-                    
-            }
+            UpdateColorMode(e.ColorMode);
         
         }
 
@@ -303,6 +297,21 @@ namespace canva.UI_ELEMENTS
 
 
         #endregion
+
+
+        private void UpdateColorMode(EColorMode? colorMode)
+        {
+
+            if (colorMode == null) return;
+
+            switch (colorMode)
+            {
+                case EColorMode.NO_IMG: DisableAllButtons(); break;
+                default: EnableButtonByMode((EColorMode)colorMode); break;
+
+            }
+
+        }
 
         private void StartCopiedAnimation(Control anchor)
         {

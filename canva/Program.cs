@@ -5,6 +5,7 @@ using canva.DAT;
 using canva.UI_ELEMENTS;
 using LibUI;
 using System.Diagnostics;
+using System.Drawing.Imaging;
 
 namespace canva
 {
@@ -21,6 +22,7 @@ namespace canva
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
 
+
             try
             {
                 //LOG.Logger.OnInit("");
@@ -31,6 +33,8 @@ namespace canva
 
 
                 Config.OnInit();
+
+
 
                 UserInterface.OnInit();
 
@@ -48,7 +52,7 @@ namespace canva
 
                 if (ToggleAppOrient)
                 {
-
+                    Classes.ColorMode.Instance.Set = ENUM.EColorMode.NO_IMG;
                     UserInterface.ToggleAppOrient();
                     UserInterface.PostInit();
 
