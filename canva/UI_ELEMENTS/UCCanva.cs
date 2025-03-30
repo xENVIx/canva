@@ -40,6 +40,20 @@ namespace canva.UI_ELEMENTS
 
             this._cnva.ColorPicked += _cnva_ColorPicked;
 
+            this.Resize += UCCanva_Resize;
+
+        }
+
+        private void UCCanva_Resize(object? sender, EventArgs e)
+        {
+            SizeButtons();
+        }
+
+        private void SizeButtons()
+        {
+
+            _btnBack.Width = this.Width / 2;
+
         }
 
         private void _cnva_ColorPicked(object? sender, ColorPickedEventArgs e)
@@ -54,6 +68,15 @@ namespace canva.UI_ELEMENTS
 
 
 
+        private void _btnForward_Click(object sender, EventArgs e)
+        {
+            SavedImages.Instance.LoadNextImage();
+        }
+
+        private void _btnBack_Click(object sender, EventArgs e)
+        {
+            SavedImages.Instance.LoadPreviousImage();
+        }
     }
 
 

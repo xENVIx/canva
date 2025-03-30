@@ -34,35 +34,41 @@
             // 
             // _ucCnva
             // 
-            _ucCnva.Size = new Size(300, 300);
+            _ucCnva.Size = new Size(300, 328);
             // 
             // _ucCmd
             // 
             _ucCmd.Dock = DockStyle.Bottom;
-            _ucCmd.Location = new Point(0, 300);
+            _ucCmd.Location = new Point(0, 328);
             _ucCmd.Size = new Size(300, 173);
             // 
             // _pnlCtrls
             // 
             _pnlCtrls.Dock = DockStyle.Top;
             _pnlCtrls.Location = new Point(0, 0);
-            _pnlCtrls.Size = new Size(300, 473);
+            _pnlCtrls.Size = new Size(300, 501);
             // 
             // _pnlBtns
             // 
             _pnlBtns.Dock = DockStyle.Fill;
-            _pnlBtns.Location = new Point(0, 473);
+            _pnlBtns.Location = new Point(0, 501);
             _pnlBtns.Size = new Size(300, 80);
             // 
             // _btnClose
             // 
             _btnClose.Dock = DockStyle.Fill;
+            _btnClose.FlatAppearance.BorderColor = Color.FromArgb(220, 255, 255);
+            _btnClose.FlatAppearance.MouseDownBackColor = Color.HotPink;
+            _btnClose.FlatAppearance.MouseOverBackColor = Color.Cyan;
             _btnClose.Location = new Point(0, 40);
             _btnClose.Size = new Size(300, 40);
             // 
             // _btnPaste
             // 
             _btnPaste.Dock = DockStyle.Top;
+            _btnPaste.FlatAppearance.BorderColor = Color.FromArgb(220, 255, 255);
+            _btnPaste.FlatAppearance.MouseDownBackColor = Color.HotPink;
+            _btnPaste.FlatAppearance.MouseOverBackColor = Color.Cyan;
             _btnPaste.Location = new Point(0, 0);
             _btnPaste.Size = new Size(300, 40);
             // 
@@ -70,7 +76,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(300, 553);
+            ClientSize = new Size(300, 581);
             Name = "UserInterfaceVert";
             _pnlCtrls.ResumeLayout(false);
             _pnlBtns.ResumeLayout(false);

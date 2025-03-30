@@ -14,6 +14,7 @@ using Cyotek.Windows.Forms;
 
 
 using canva.Classes;
+using LibUI;
 
 namespace canva.UI_ELEMENTS
 {
@@ -77,7 +78,27 @@ namespace canva.UI_ELEMENTS
 
 
             Classes.ColorMode.Instance.ColorModeChanged += Instance_ColorModeChanged;
+            Classes.SavedImages.Instance.ChangeImage += Instance_ChangeImage;
+            Classes.SavedImages.Instance.DeleteImageHistory += Instance_DeleteImageHistory;
 
+        }
+
+        private void Instance_DeleteImageHistory(object? sender, SavedImageEventArgs e)
+        {
+            this.Image.Dispose();
+            
+        }
+
+        private void Instance_ChangeImage(object? sender, SavedImageEventArgs e)
+        {
+            try
+            {
+                PasteImage(SavedImages.Instance.GetCurrentImage.ImageFile);
+            }
+            catch (Exception ex)
+            {
+                MyMessageBox.ShowError(ex);
+            }
         }
 
         private void CyotekCanva_MouseMove(object? sender, MouseEventArgs e)
@@ -217,7 +238,9 @@ namespace canva.UI_ELEMENTS
                 if (img == null) return;
 
 
-                PasteImage(Classes.SavedImages.Instance.LoadNewImage(new SavedImages.ImageSave((Image)img)));
+                //PasteImage(Classes.SavedImages.Instance.LoadNewImage(new SavedImages.ImageSave((Image)img)));
+
+                SavedImages.Instance.LoadNewImage(new SavedImages.ImageSave((Image)img));
             }
         }
 

@@ -60,6 +60,13 @@ namespace canva.Classes
 
         #endregion
 
+        #region EVENTS
+
+        public event EventHandler<SavedImageEventArgs>? ChangeImage;
+        public event EventHandler<SavedImageEventArgs>? DeleteImageHistory;
+
+        #endregion
+
         #region VARIABLES
 
         #region STATIC
@@ -80,39 +87,13 @@ namespace canva.Classes
             } 
         }
 
-        public ImageSave GetNextImage
-        {
-            get
-            {
-                if (_curInd + 1 >= _images.Count) return GetCurrentImage;
-                else
-                {
-                    _curInd++;
-                    return GetCurrentImage;
-                }
-
-            }
-        }
-
-        public ImageSave GetPreviousImage
-        {
-            get
-            {
-                if (_curInd - 1 < 0) return GetCurrentImage;
-                else
-                {
-                    _curInd--;
-                    return GetCurrentImage;
-                }
-            }
-        }
 
 
         #endregion
 
         #region METHODS
 
-        public Image LoadNewImage(ImageSave imgSv)
+        public void LoadNewImage(ImageSave imgSv)
         {
 
             if (imgSv.ImageFile == null) throw new ArgumentNullException("Image File in ImageSave class Cannot Be NULL");
@@ -120,9 +101,50 @@ namespace canva.Classes
             _images.Add(imgSv);
             _curInd = _images.Count - 1;
 
-            return GetCurrentImage.ImageFile;
+            ChangeImage?.Invoke(this, new SavedImageEventArgs());
 
         }
+
+        public void LoadCurrentImage()
+        {
+            ChangeImage?.Invoke(this, new SavedImageEventArgs());   
+        }
+
+        public void LoadNextImage()
+        {
+            if (_curInd + 1 >= _images.Count) return;
+            else
+            {
+                _curInd++;
+                ChangeImage?.Invoke(this, new SavedImageEventArgs());
+            }
+        }
+
+        public void LoadPreviousImage()
+        {
+            if (_curInd - 1 < 0) return;
+            else
+            {
+                _curInd--;
+                ChangeImage?.Invoke(this, new SavedImageEventArgs());
+            }
+        }
+
+        public void ClearMemory()
+        {
+
+            _curInd = 0;
+            _images.Clear();
+            DeleteImageHistory?.Invoke(this, new SavedImageEventArgs());
+
+        }
+
+        public void DeregisterEvents()
+        {
+            ChangeImage = null;
+            DeleteImageHistory = null;
+        }
+
 
         #endregion
 
@@ -154,6 +176,21 @@ namespace canva.Classes
         #endregion
 
         #endregion
+
+    }
+
+    public enum EPrevNext
+    {
+        PREVIOUS,
+        NEXT,
+        CURRENT,
+    }
+
+    public class SavedImageEventArgs : EventArgs
+    {
+
+        public SavedImageEventArgs() : base()
+        {  }
 
     }
 }

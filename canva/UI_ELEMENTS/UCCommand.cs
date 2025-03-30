@@ -341,29 +341,38 @@ namespace canva.UI_ELEMENTS
             }
         }
 
-        private void ColorPicked1(Color color)
+        public void ColorPicked1(Color color)
         {
             string hex = $"#{color.R:X2}{color.G:X2}{color.B:X2}";
             _tbColor1.Text = hex;
             _pnlColor1.BackColor = color;
+
+            AppDat.Instance.Color1 = color;
+
         }
-        private void ColorPicked2(Color color)
+        public void ColorPicked2(Color color)
         {
             string hex = $"#{color.R:X2}{color.G:X2}{color.B:X2}";
             _tbColor2.Text = hex;
             _pnlColor2.BackColor = color;
+
+            AppDat.Instance.Color2 = color;
         }
-        private void ColorPicked3(Color color)
+        public void ColorPicked3(Color color)
         {
             string hex = $"#{color.R:X2}{color.G:X2}{color.B:X2}";
             _tbColor3.Text = hex;
             _pnlColor3.BackColor = color;
+
+            AppDat.Instance.Color3 = color;
         }
-        private void ColorPicked4(Color color)
+        public void ColorPicked4(Color color)
         {
             string hex = $"#{color.R:X2}{color.G:X2}{color.B:X2}";
             _tbColor4.Text = hex;
             _pnlColor4.BackColor = color;
+
+            AppDat.Instance.Color4 = color;
         }
 
         private void DisableAllButtons()

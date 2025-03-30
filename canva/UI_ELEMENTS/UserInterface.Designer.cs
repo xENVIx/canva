@@ -79,6 +79,11 @@
             // _btnClose
             // 
             _btnClose.BackColor = Color.FromArgb(220, 255, 255);
+            _btnClose.FlatAppearance.BorderColor = Color.FromArgb(220, 255, 255);
+            _btnClose.FlatAppearance.MouseDownBackColor = Color.HotPink;
+            _btnClose.FlatAppearance.MouseOverBackColor = Color.Cyan;
+            _btnClose.FlatStyle = FlatStyle.Flat;
+            _btnClose.ForeColor = Color.FromArgb(0, 0, 0);
             _btnClose.Location = new Point(88, 65);
             _btnClose.Name = "_btnClose";
             _btnClose.Size = new Size(96, 23);
@@ -89,6 +94,11 @@
             // _btnPaste
             // 
             _btnPaste.BackColor = Color.FromArgb(220, 255, 255);
+            _btnPaste.FlatAppearance.BorderColor = Color.FromArgb(220, 255, 255);
+            _btnPaste.FlatAppearance.MouseDownBackColor = Color.HotPink;
+            _btnPaste.FlatAppearance.MouseOverBackColor = Color.Cyan;
+            _btnPaste.FlatStyle = FlatStyle.Flat;
+            _btnPaste.ForeColor = Color.FromArgb(0, 0, 0);
             _btnPaste.Location = new Point(12, 26);
             _btnPaste.Name = "_btnPaste";
             _btnPaste.Size = new Size(96, 23);
@@ -111,7 +121,9 @@
             Controls.Add(_pnlCtrls);
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
             Name = "UserInterface";
+            StartPosition = FormStartPosition.Manual;
             Text = "FrmMain";
+            TopMost = true;
             _pnlCtrls.ResumeLayout(false);
             _pnlBtns.ResumeLayout(false);
             ResumeLayout(false);

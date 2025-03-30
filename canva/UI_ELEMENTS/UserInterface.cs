@@ -70,6 +70,9 @@ namespace canva.UI_ELEMENTS
 
         public static void PostInit()
         {
+
+            SavedImages.Instance.DeregisterEvents();
+
             switch (_appOrient)
             {
                 case EAppOrientation.HORIZONTAL: _instance = new UserInterfaceHoriz(); break;
@@ -91,6 +94,31 @@ namespace canva.UI_ELEMENTS
         }
 
         #endregion
+
+        public void PostColorSet()
+        {
+            
+            if (AppDat.Instance.ColorSet(1))
+            {
+                _ucCmd.ColorPicked1(AppDat.Instance.Color1);
+            }
+
+            if (AppDat.Instance.ColorSet(2))
+            {
+                _ucCmd.ColorPicked2(AppDat.Instance.Color2);
+            }
+
+            if (AppDat.Instance.ColorSet(3))
+            {
+                _ucCmd.ColorPicked3(AppDat.Instance.Color3);
+            }
+
+            if (AppDat.Instance.ColorSet(4))
+            {
+                _ucCmd.ColorPicked4(AppDat.Instance.Color4);
+            }
+
+        }
 
         #endregion
 
@@ -146,24 +174,35 @@ namespace canva.UI_ELEMENTS
             op3.Click += Op3_Click;
             _cmsOptions.Items.Add(op3);
 
-            ToolStripMenuItem op4 = new ToolStripMenuItem("Load Previous Image...");
-            op4.Click += Op4_Click;
-            _cmsOptions.Items.Add(op4);
+            //ToolStripMenuItem op4 = new ToolStripMenuItem("Load Previous Image...");
+            //op4.Click += Op4_Click;
+            //_cmsOptions.Items.Add(op4);
 
-            ToolStripMenuItem op5 = new ToolStripMenuItem("Load Next Image...");
-            op5.Click += Op5_Click;
-            _cmsOptions.Items.Add(op5);
+            //ToolStripMenuItem op5 = new ToolStripMenuItem("Load Next Image...");
+            //op5.Click += Op5_Click;
+            //_cmsOptions.Items.Add(op5);
+
+            ToolStripMenuItem op6 = new ToolStripMenuItem("Clear Image History...");
+            op6.Click += Op6_Click;
+            _cmsOptions.Items.Add(op6);
+        }
+
+        private void Op6_Click(object? sender, EventArgs e)
+        {
+            SavedImages.Instance.ClearMemory();
         }
 
         private void Op5_Click(object? sender, EventArgs e)
         {
-            _ucCnva.PasteClipboard(SavedImages.Instance.GetNextImage.ImageFile);
+            //_ucCnva.PasteClipboard(SavedImages.Instance.GetNextImage.ImageFile);
+            SavedImages.Instance.LoadNextImage();
         }
 
         private void Op4_Click(object? sender, EventArgs e)
         {
 
-            _ucCnva.PasteClipboard(SavedImages.Instance.GetPreviousImage.ImageFile);
+            //_ucCnva.PasteClipboard(SavedImages.Instance.GetPreviousImage.ImageFile);
+            SavedImages.Instance.LoadPreviousImage();
         }
 
 
@@ -269,7 +308,9 @@ namespace canva.UI_ELEMENTS
                 if (image != null)
                 {
 
-                    _ucCnva.PasteClipboard(SavedImages.Instance.LoadNewImage(new SavedImages.ImageSave((Image)image)));
+                    //_ucCnva.PasteClipboard(SavedImages.Instance.LoadNewImage(new SavedImages.ImageSave((Image)image)));
+
+                    SavedImages.Instance.LoadNewImage(new SavedImages.ImageSave((Image)image));
 
                     //_ucCnva.PasteClipboard(image);
 

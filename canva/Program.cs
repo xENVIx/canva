@@ -1,5 +1,6 @@
 
 
+using canva.Classes;
 using canva.DAT;
 
 using canva.UI_ELEMENTS;
@@ -55,6 +56,13 @@ namespace canva
                     Classes.ColorMode.Instance.Set = ENUM.EColorMode.NO_IMG;
                     UserInterface.ToggleAppOrient();
                     UserInterface.PostInit();
+
+
+
+                    UserInterface.Instance.PostColorSet();
+
+                    SavedImages.Instance.LoadCurrentImage();
+
 
                     ToggleAppOrient = false;
                 }

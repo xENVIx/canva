@@ -32,36 +32,42 @@
             _pnlBtns.SuspendLayout();
             SuspendLayout();
             // 
-            // ucCanva1
+            // _ucCnva
             // 
-            _ucCnva.Size = new Size(300, 300);
+            _ucCnva.Size = new Size(300, 328);
             // 
-            // ucCommand1
+            // _ucCmd
             // 
             _ucCmd.Location = new Point(300, 0);
-            _ucCmd.Size = new Size(257, 300);
+            _ucCmd.Size = new Size(257, 328);
             // 
             // _pnlCtrls
             // 
             _pnlCtrls.Dock = DockStyle.Top;
             _pnlCtrls.Location = new Point(0, 0);
-            _pnlCtrls.Size = new Size(557, 300);
+            _pnlCtrls.Size = new Size(557, 328);
             // 
             // _pnlBtns
             // 
             _pnlBtns.Dock = DockStyle.Fill;
-            _pnlBtns.Location = new Point(0, 300);
+            _pnlBtns.Location = new Point(0, 328);
             _pnlBtns.Size = new Size(557, 49);
             // 
             // _btnClose
             // 
             _btnClose.Dock = DockStyle.Fill;
+            _btnClose.FlatAppearance.BorderColor = Color.FromArgb(220, 255, 255);
+            _btnClose.FlatAppearance.MouseDownBackColor = Color.HotPink;
+            _btnClose.FlatAppearance.MouseOverBackColor = Color.Cyan;
             _btnClose.Location = new Point(300, 0);
             _btnClose.Size = new Size(257, 49);
             // 
             // _btnPaste
             // 
             _btnPaste.Dock = DockStyle.Left;
+            _btnPaste.FlatAppearance.BorderColor = Color.FromArgb(220, 255, 255);
+            _btnPaste.FlatAppearance.MouseDownBackColor = Color.HotPink;
+            _btnPaste.FlatAppearance.MouseOverBackColor = Color.Cyan;
             _btnPaste.Location = new Point(0, 0);
             _btnPaste.Size = new Size(300, 49);
             // 
@@ -69,7 +75,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(557, 349);
+            ClientSize = new Size(557, 377);
             Name = "UserInterfaceHoriz";
             _pnlCtrls.ResumeLayout(false);
             _pnlBtns.ResumeLayout(false);
