@@ -45,6 +45,10 @@ namespace canva.UI_ELEMENTS
                 case EColorMode.COLOR2: ColorPicked2(color); break;
                 case EColorMode.COLOR3: ColorPicked3(color); break;
                 case EColorMode.COLOR4: ColorPicked4(color); break;
+                case EColorMode.COLOR5: ColorPicked5(color); break;
+                case EColorMode.COLOR6: ColorPicked6(color); break;
+                case EColorMode.COLOR7: ColorPicked7(color); break;
+                case EColorMode.COLOR8: ColorPicked8(color); break;
 
                 default: break;
 
@@ -71,6 +75,10 @@ namespace canva.UI_ELEMENTS
             this._btnColor2.MouseClick += _btnColor2_Click;
             this._btnColor3.MouseClick += _btnColor3_Click;
             this._btnColor4.MouseClick += _btnColor4_Click;
+            this._btnColor5.MouseClick += _btnColor5_Click;
+            this._btnColor6.MouseClick += _btnColor6_Click;
+            this._btnColor7.MouseClick += _btnColor7_Click;
+            this._btnColor8.MouseClick += _btnColor8_Click;
 
 
             this.MouseClick += UCCommand_MouseClick;
@@ -79,16 +87,30 @@ namespace canva.UI_ELEMENTS
             this._pnlColor2.MouseClick += UCCommand_MouseClick;
             this._pnlColor3.MouseClick += UCCommand_MouseClick;
             this._pnlColor4.MouseClick += UCCommand_MouseClick;
+            this._pnlColor5.MouseClick += UCCommand_MouseClick;
+            this._pnlColor6.MouseClick += UCCommand_MouseClick;
+            this._pnlColor7.MouseClick += UCCommand_MouseClick;
+            this._pnlColor8.MouseClick += UCCommand_MouseClick;
+
             this._tbColor1.MouseClick += UCCommand_MouseClick;
             this._tbColor2.MouseClick += UCCommand_MouseClick;
             this._tbColor3.MouseClick += UCCommand_MouseClick;
             this._tbColor4.MouseClick += UCCommand_MouseClick;
+            this._tbColor5.MouseClick += UCCommand_MouseClick;
+            this._tbColor6.MouseClick += UCCommand_MouseClick;
+            this._tbColor7.MouseClick += UCCommand_MouseClick;
+            this._tbColor8.MouseClick += UCCommand_MouseClick;
 
 
             this._tbColor1.Click += _tbColor1_Click;
             this._tbColor2.Click += _tbColor2_Click;
             this._tbColor3.Click += _tbColor3_Click;
             this._tbColor4.Click += _tbColor4_Click;
+
+            this._tbColor5.Click += _tbColor5_Click;
+            this._tbColor6.Click += _tbColor6_Click;
+            this._tbColor7.Click += _tbColor7_Click;
+            this._tbColor8.Click += _tbColor8_Click;
 
             this.MouseMove += UCCommand_MouseMove;
 
@@ -122,6 +144,10 @@ namespace canva.UI_ELEMENTS
 
         
 
+        
+
+
+
 
 
 
@@ -151,6 +177,78 @@ namespace canva.UI_ELEMENTS
             _mouseLoc = e.Location;
         }
 
+
+        private void _tbColor8_Click(object? sender, EventArgs e)
+        {
+            if (_tbColor8.Text == "") return;
+
+            try
+            {
+
+                Clipboard.Clear();
+                Clipboard.SetText(_tbColor8.Text);
+            }
+            catch (Exception ex)
+            {
+                return;
+            }
+
+            StartCopiedAnimation(_tbColor8);
+        }
+
+        private void _tbColor7_Click(object? sender, EventArgs e)
+        {
+            if (_tbColor7.Text == "") return;
+
+            try
+            {
+
+                Clipboard.Clear();
+                Clipboard.SetText(_tbColor7.Text);
+            }
+            catch (Exception ex)
+            {
+                return;
+            }
+
+            StartCopiedAnimation(_tbColor7);
+        }
+
+        private void _tbColor6_Click(object? sender, EventArgs e)
+        {
+            if (_tbColor6.Text == "") return;
+
+            try
+            {
+
+                Clipboard.Clear();
+                Clipboard.SetText(_tbColor6.Text);
+            }
+            catch (Exception ex)
+            {
+                return;
+            }
+
+            StartCopiedAnimation(_tbColor6);
+        }
+
+        private void _tbColor5_Click(object? sender, EventArgs e)
+        {
+            if (_tbColor5.Text == "") return;
+
+            try
+            {
+
+                Clipboard.Clear();
+                Clipboard.SetText(_tbColor5.Text);
+            }
+            catch (Exception ex)
+            {
+                return;
+            }
+
+            StartCopiedAnimation(_tbColor5);
+        }
         private void _tbColor4_Click(object? sender, EventArgs e)
         {
 
@@ -247,6 +345,50 @@ namespace canva.UI_ELEMENTS
 
             UpdateColorMode(e.ColorMode);
         
+        }
+
+        private void _btnColor8_Click(object? sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                if (Classes.ColorMode.Instance.Get == EColorMode.NO_IMG) return;
+
+                ColorMode.Instance.Set = EColorMode.COLOR8;
+            }
+            else UCCommand_MouseClick(sender, e);
+        }
+
+        private void _btnColor7_Click(object? sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                if (Classes.ColorMode.Instance.Get == EColorMode.NO_IMG) return;
+
+                ColorMode.Instance.Set = EColorMode.COLOR7;
+            }
+            else UCCommand_MouseClick(sender, e);
+        }
+
+        private void _btnColor6_Click(object? sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                if (Classes.ColorMode.Instance.Get == EColorMode.NO_IMG) return;
+
+                ColorMode.Instance.Set = EColorMode.COLOR6;
+            }
+            else UCCommand_MouseClick(sender, e);
+        }
+
+        private void _btnColor5_Click(object? sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                if (Classes.ColorMode.Instance.Get == EColorMode.NO_IMG) return;
+
+                ColorMode.Instance.Set = EColorMode.COLOR5;
+            }
+            else UCCommand_MouseClick(sender, e);
         }
 
 
@@ -374,6 +516,39 @@ namespace canva.UI_ELEMENTS
 
             AppDat.Instance.Color4 = color;
         }
+        
+        public void ColorPicked5(Color color)
+        {
+            string hex = $"#{color.R:X2}{color.G:X2}{color.B:X2}";
+            _tbColor5.Text = hex;
+            _pnlColor5.BackColor = color;
+
+            //AppDat.Instance.Color5 = color;
+        }
+        public void ColorPicked6(Color color)
+        {
+            string hex = $"#{color.R:X2}{color.G:X2}{color.B:X2}";
+            _tbColor6.Text = hex;
+            _pnlColor6.BackColor = color;
+
+            //AppDat.Instance.Color6 = color;
+        }
+        public void ColorPicked7(Color color)
+        {
+            string hex = $"#{color.R:X2}{color.G:X2}{color.B:X2}";
+            _tbColor7.Text = hex;
+            _pnlColor7.BackColor = color;
+
+            //AppDat.Instance.Color7 = color;
+        }
+        public void ColorPicked8(Color color)
+        {
+            string hex = $"#{color.R:X2}{color.G:X2}{color.B:X2}";
+            _tbColor8.Text = hex;
+            _pnlColor8.BackColor = color;
+
+            //AppDat.Instance.Color8 = color;
+        }
 
         private void DisableAllButtons()
         {
@@ -381,6 +556,10 @@ namespace canva.UI_ELEMENTS
             _btnColor2.SetButton(false, ButtonBitmaps.Instance.Disabled2);
             _btnColor3.SetButton(false, ButtonBitmaps.Instance.Disabled3);
             _btnColor4.SetButton(false, ButtonBitmaps.Instance.Disabled4);
+            _btnColor5.SetButton(false); //, ButtonBitmaps.Instance.Disabled4);
+            _btnColor6.SetButton(false); //, ButtonBitmaps.Instance.Disabled4);
+            _btnColor7.SetButton(false); //, ButtonBitmaps.Instance.Disabled4);
+            _btnColor8.SetButton(false); //, ButtonBitmaps.Instance.Disabled4);
         }
 
         private void EnableButtonByMode(EColorMode colorMode)
@@ -392,6 +571,10 @@ namespace canva.UI_ELEMENTS
                 case EColorMode.COLOR2: Enable2();      break;
                 case EColorMode.COLOR3: Enable3();      break;
                 case EColorMode.COLOR4: Enable4();      break;
+                case EColorMode.COLOR5: Enable5();      break;
+                case EColorMode.COLOR6: Enable6();      break;
+                case EColorMode.COLOR7: Enable7();      break;
+                case EColorMode.COLOR8: Enable8();      break;
             }
         }
 
@@ -401,6 +584,10 @@ namespace canva.UI_ELEMENTS
             _btnColor2.SetButton(true, ButtonBitmaps.Instance.Enabled2);
             _btnColor3.SetButton(true, ButtonBitmaps.Instance.Enabled3);
             _btnColor4.SetButton(true, ButtonBitmaps.Instance.Enabled4);
+            _btnColor5.SetButton(true); //, ButtonBitmaps.Instance.Enabled4);
+            _btnColor6.SetButton(true); //, ButtonBitmaps.Instance.Enabled4);
+            _btnColor7.SetButton(true); //, ButtonBitmaps.Instance.Enabled4);
+            _btnColor8.SetButton(true); //, ButtonBitmaps.Instance.Enabled4);
 
         }
 
@@ -410,6 +597,10 @@ namespace canva.UI_ELEMENTS
             _btnColor2.SetButton(false, ButtonBitmaps.Instance.Disabled2);
             _btnColor3.SetButton(false, ButtonBitmaps.Instance.Disabled3);
             _btnColor4.SetButton(false, ButtonBitmaps.Instance.Disabled4);
+            _btnColor5.SetButton(false); //, ButtonBitmaps.Instance.Disabled4);
+            _btnColor6.SetButton(false); //, ButtonBitmaps.Instance.Disabled4);
+            _btnColor7.SetButton(false); //, ButtonBitmaps.Instance.Disabled4);
+            _btnColor8.SetButton(false); //, ButtonBitmaps.Instance.Disabled4);
         }
         private void Enable2()
         {
@@ -417,6 +608,10 @@ namespace canva.UI_ELEMENTS
             _btnColor2.SetButton(true, ButtonBitmaps.Instance.Enabled2);
             _btnColor3.SetButton(false, ButtonBitmaps.Instance.Disabled3);
             _btnColor4.SetButton(false, ButtonBitmaps.Instance.Disabled4);
+            _btnColor5.SetButton(false); //, ButtonBitmaps.Instance.Disabled4);
+            _btnColor6.SetButton(false); //, ButtonBitmaps.Instance.Disabled4);
+            _btnColor7.SetButton(false); //, ButtonBitmaps.Instance.Disabled4);
+            _btnColor8.SetButton(false); //, ButtonBitmaps.Instance.Disabled4);
         }
         private void Enable3()
         {
@@ -424,6 +619,10 @@ namespace canva.UI_ELEMENTS
             _btnColor2.SetButton(false, ButtonBitmaps.Instance.Disabled2);
             _btnColor3.SetButton(true, ButtonBitmaps.Instance.Enabled3);
             _btnColor4.SetButton(false, ButtonBitmaps.Instance.Disabled4);
+            _btnColor5.SetButton(false); //, ButtonBitmaps.Instance.Disabled4);
+            _btnColor6.SetButton(false); //, ButtonBitmaps.Instance.Disabled4);
+            _btnColor7.SetButton(false); //, ButtonBitmaps.Instance.Disabled4);
+            _btnColor8.SetButton(false); //, ButtonBitmaps.Instance.Disabled4);
         }
         private void Enable4()
         {
@@ -431,6 +630,54 @@ namespace canva.UI_ELEMENTS
             _btnColor2.SetButton(false, ButtonBitmaps.Instance.Disabled2);
             _btnColor3.SetButton(false, ButtonBitmaps.Instance.Disabled3);
             _btnColor4.SetButton(true, ButtonBitmaps.Instance.Enabled4);
+            _btnColor5.SetButton(false); //, ButtonBitmaps.Instance.Enabled4);
+            _btnColor6.SetButton(false); //, ButtonBitmaps.Instance.Enabled4);
+            _btnColor7.SetButton(false); //, ButtonBitmaps.Instance.Enabled4);
+            _btnColor8.SetButton(false); //, ButtonBitmaps.Instance.Enabled4);
+        }
+        private void Enable5()
+        {
+            _btnColor1.SetButton(false, ButtonBitmaps.Instance.Disabled1);
+            _btnColor2.SetButton(false, ButtonBitmaps.Instance.Disabled2);
+            _btnColor3.SetButton(false, ButtonBitmaps.Instance.Disabled3);
+            _btnColor4.SetButton(false, ButtonBitmaps.Instance.Enabled4);
+            _btnColor5.SetButton(true); //, ButtonBitmaps.Instance.Enabled4);
+            _btnColor6.SetButton(false); //, ButtonBitmaps.Instance.Enabled4);
+            _btnColor7.SetButton(false); //, ButtonBitmaps.Instance.Enabled4);
+            _btnColor8.SetButton(false); //, ButtonBitmaps.Instance.Enabled4);
+        }
+        private void Enable6()
+        {
+            _btnColor1.SetButton(false, ButtonBitmaps.Instance.Disabled1);
+            _btnColor2.SetButton(false, ButtonBitmaps.Instance.Disabled2);
+            _btnColor3.SetButton(false, ButtonBitmaps.Instance.Disabled3);
+            _btnColor4.SetButton(false, ButtonBitmaps.Instance.Enabled4);
+            _btnColor5.SetButton(false); //, ButtonBitmaps.Instance.Enabled4);
+            _btnColor6.SetButton(true); //, ButtonBitmaps.Instance.Enabled4);
+            _btnColor7.SetButton(false); //, ButtonBitmaps.Instance.Enabled4);
+            _btnColor8.SetButton(false); //, ButtonBitmaps.Instance.Enabled4);
+        }
+        private void Enable7()
+        {
+            _btnColor1.SetButton(false, ButtonBitmaps.Instance.Disabled1);
+            _btnColor2.SetButton(false, ButtonBitmaps.Instance.Disabled2);
+            _btnColor3.SetButton(false, ButtonBitmaps.Instance.Disabled3);
+            _btnColor4.SetButton(false, ButtonBitmaps.Instance.Enabled4);
+            _btnColor5.SetButton(false); //, ButtonBitmaps.Instance.Enabled4);
+            _btnColor6.SetButton(false); //, ButtonBitmaps.Instance.Enabled4);
+            _btnColor7.SetButton(true); //, ButtonBitmaps.Instance.Enabled4);
+            _btnColor8.SetButton(false); //, ButtonBitmaps.Instance.Enabled4);
+        }
+        private void Enable8()
+        {
+            _btnColor1.SetButton(false, ButtonBitmaps.Instance.Disabled1);
+            _btnColor2.SetButton(false, ButtonBitmaps.Instance.Disabled2);
+            _btnColor3.SetButton(false, ButtonBitmaps.Instance.Disabled3);
+            _btnColor4.SetButton(false, ButtonBitmaps.Instance.Enabled4);
+            _btnColor5.SetButton(false); //, ButtonBitmaps.Instance.Enabled4);
+            _btnColor6.SetButton(false); //, ButtonBitmaps.Instance.Enabled4);
+            _btnColor7.SetButton(false); //, ButtonBitmaps.Instance.Enabled4);
+            _btnColor8.SetButton(true); //, ButtonBitmaps.Instance.Enabled4);
         }
 
         #endregion

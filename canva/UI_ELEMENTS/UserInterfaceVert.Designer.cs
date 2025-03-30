@@ -40,18 +40,18 @@
             // 
             _ucCmd.Dock = DockStyle.Bottom;
             _ucCmd.Location = new Point(0, 328);
-            _ucCmd.Size = new Size(300, 173);
+            _ucCmd.Size = new Size(300, 336);
             // 
             // _pnlCtrls
             // 
             _pnlCtrls.Dock = DockStyle.Top;
             _pnlCtrls.Location = new Point(0, 0);
-            _pnlCtrls.Size = new Size(300, 501);
+            _pnlCtrls.Size = new Size(300, 664);
             // 
             // _pnlBtns
             // 
             _pnlBtns.Dock = DockStyle.Fill;
-            _pnlBtns.Location = new Point(0, 501);
+            _pnlBtns.Location = new Point(0, 664);
             _pnlBtns.Size = new Size(300, 80);
             // 
             // _btnClose
@@ -76,7 +76,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(300, 581);
+            ClientSize = new Size(300, 744);
             Name = "UserInterfaceVert";
             _pnlCtrls.ResumeLayout(false);
             _pnlBtns.ResumeLayout(false);

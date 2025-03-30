@@ -14,5 +14,9 @@ namespace canva.ENUM
         COLOR2,
         COLOR3,
         COLOR4,
+        COLOR5,
+        COLOR6,
+        COLOR7,
+        COLOR8,
     }
 }

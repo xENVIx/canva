@@ -107,7 +107,8 @@ namespace canva.Classes
 
         public void LoadCurrentImage()
         {
-            ChangeImage?.Invoke(this, new SavedImageEventArgs());   
+            if (_images.Count > 0 && _curInd >= 0 && _curInd < _images.Count)
+                ChangeImage?.Invoke(this, new SavedImageEventArgs());   
         }
 
         public void LoadNextImage()
