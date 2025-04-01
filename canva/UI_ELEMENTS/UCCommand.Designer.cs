@@ -54,6 +54,7 @@ namespace canva.UI_ELEMENTS
             _tbColor8 = new CvTextBox();
             _pnlColor8 = new Panel();
             _btnColor8 = new CvButton();
+            _cd = new ColorDialog();
             SuspendLayout();
             // 
             // _btnColor1
@@ -405,5 +406,6 @@ namespace canva.UI_ELEMENTS
         private CvTextBox _tbColor8;
         private Panel _pnlColor8;
         private CvButton _btnColor8;
+        private ColorDialog _cd;
     }
 }

@@ -21,7 +21,7 @@ namespace canva.UI_ELEMENTS
 
     
 
-    public partial class CyotekCanva : ImageBox
+    public partial class CyotekCanva : MyCyotekImageBox
     {
 
 
@@ -34,9 +34,6 @@ namespace canva.UI_ELEMENTS
             _curCur = cursor;
             Cursor = _curCur;
 
-
-
-
         }
 
         private void CyotekCanva_CursorChanged(object? sender, EventArgs e)
@@ -47,7 +44,7 @@ namespace canva.UI_ELEMENTS
             if (Cursor != _curCur) Cursor = _curCur;
         }
 
-        public CyotekCanva()
+        public CyotekCanva(): base()
         {
 
             BackColor = Color.Black;
@@ -57,30 +54,69 @@ namespace canva.UI_ELEMENTS
             InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
             Zoom = 100;
 
-            Resize += CyotekCanva_Resize;
 
+
+            Resize += CyotekCanva_Resize;
             KeyDown += CyotekCanva_KeyDown;
             KeyUp += CyotekCanva_KeyUp;
-
-
             MouseClick += CyotekCanva_MouseClick;
-
             MouseUp += CyotekCanva_MouseUp;
-
-
-            MouseMove += CyotekCanva_MouseMove;
-
-
+            //MouseMove += CyotekCanva_MouseMove;
             Scroll += CyotekCanva_Scroll;
+            //MouseDown += CyotekCanva_MouseDown;
 
-            
 
+
+
+             _timer = new System.Timers.Timer();
+            _timer.Interval = 100;
+            _timer.Elapsed += _timer_Elapsed;
+                      
 
 
             Classes.ColorMode.Instance.ColorModeChanged += Instance_ColorModeChanged;
             Classes.SavedImages.Instance.ChangeImage += Instance_ChangeImage;
             Classes.SavedImages.Instance.DeleteImageHistory += Instance_DeleteImageHistory;
 
+        }
+
+        private void _timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
+        {
+            if (_mouseDown) _confirmPan = true;
+            else _confirmPan = false;
+        }
+
+        private System.Timers.Timer _timer;
+        private bool _confirmPan = false;
+        private bool _mouseDown = false;
+
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
+
+            _mouseDown = true;
+            _confirmPan = false;
+            _timer.Start();
+            
+            base.OnMouseDown(e);
+        }
+
+        protected override void OnMouseUp(MouseEventArgs e)
+        {
+
+            _confirmPan = false;
+            _mouseDown = false;
+            base.OnMouseUp(e);
+        }
+
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+
+            if (_confirmPan)
+            {
+                SelectColor(e.Location);
+            }
+
+            base.OnMouseMove(e);    
         }
 
         private void Instance_DeleteImageHistory(object? sender, SavedImageEventArgs e)
@@ -123,10 +159,17 @@ namespace canva.UI_ELEMENTS
             switch (e.ColorMode)
             {
                 case ENUM.EColorMode.NO_IMG:
-                case ENUM.EColorMode.NONE:
+                    base.SupressPan = true;
                     SetCursor(Cursors.Default);
                     break;
-                default: SetCursor(Classes.CustomCursor.Instance.DripperTool); break;
+                case ENUM.EColorMode.NONE:
+                    base.SupressPan = false;
+                    SetCursor(Cursors.Default);
+                    break;
+                default:
+                    base.SupressPan = true;
+                    SetCursor(Classes.CustomCursor.Instance.DripperTool); 
+                    break;
 
             }
 
@@ -145,20 +188,28 @@ namespace canva.UI_ELEMENTS
                 }
                 else if (Classes.ColorMode.Instance.GetColorMode != ENUM.EColorMode.NONE && Image != null)
                 {
-                    Point imgPt = PointToImage(e.Location);
 
-                    if (imgPt.X >= 0 && imgPt.Y >= 0 && imgPt.X < Image.Width && imgPt.Y < Image.Height)
-                    {
-                        Bitmap bmp = (Bitmap)Image;
-                        Color picked = bmp.GetPixel(imgPt.X, imgPt.Y);
-                        ColorPicked?.Invoke(this, new ColorPickedEventArgs(picked, imgPt));
-                    }
-
+                    SelectColor(e.Location);
                 }
             }
 
 
         }
+
+
+
+        private void SelectColor(Point mouseLocation)
+        {
+            Point imgPt = PointToImage(mouseLocation);
+
+            if (imgPt.X >= 0 && imgPt.Y >= 0 && imgPt.X < Image.Width && imgPt.Y < Image.Height)
+            {
+                Bitmap bmp = (Bitmap)Image;
+                Color picked = bmp.GetPixel(imgPt.X, imgPt.Y);
+                ColorPicked?.Invoke(this, new ColorPickedEventArgs(picked, imgPt));
+            }
+        }
+
 
         private void CyotekCanva_Scroll(object? sender, ScrollEventArgs e)
         {
@@ -196,10 +247,6 @@ namespace canva.UI_ELEMENTS
             
         }
 
-        protected override void OnMouseDown(MouseEventArgs e)
-        {
-
-        }
 
 
         internal void CyotekCanva_KeyUp(object? sender, KeyEventArgs e)

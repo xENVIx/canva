@@ -9,6 +9,7 @@ using System.Security.Cryptography.X509Certificates;
 
 using canva.Classes;
 using canva.DAT;
+using System.Runtime.CompilerServices;
 
 namespace canva.UI_ELEMENTS
 {
@@ -112,9 +113,22 @@ namespace canva.UI_ELEMENTS
             this._tbColor7.Click += _tbColor7_Click;
             this._tbColor8.Click += _tbColor8_Click;
 
+
+
+            _pnlColor1.DoubleClick += _pnlColor1_DoubleClick;
+            _pnlColor2.DoubleClick += _pnlColor2_DoubleClick;
+            _pnlColor3.DoubleClick += _pnlColor3_DoubleClick;
+            _pnlColor4.DoubleClick += _pnlColor4_DoubleClick;
+            _pnlColor5.DoubleClick += _pnlColor5_DoubleClick;
+            _pnlColor6.DoubleClick += _pnlColor6_DoubleClick;
+            _pnlColor7.DoubleClick += _pnlColor7_DoubleClick;
+            _pnlColor8.DoubleClick += _pnlColor8_DoubleClick;
+
             this.MouseMove += UCCommand_MouseMove;
 
             base.BackColor = Config.Instance.BackgroundColor;
+
+            
 
 
             _copiedOverlayTimer.Interval = 30;
@@ -144,7 +158,9 @@ namespace canva.UI_ELEMENTS
 
         
 
-        
+
+
+
 
 
 
@@ -159,6 +175,13 @@ namespace canva.UI_ELEMENTS
 
         #region PRIVATE
 
+        #region DELEGATES
+
+
+        private delegate void ColorPickedDelegate(Color color);
+
+        #endregion
+
         #region VARIABLES
 
         private OverlayForm _copiedOverlay = new OverlayForm();
@@ -171,6 +194,57 @@ namespace canva.UI_ELEMENTS
         #region METHODS
 
         #region EVENTS
+
+        private void _pnlColor1_DoubleClick(object? sender, EventArgs e)
+        {
+
+            PictureChooser(_tbColor1, _pnlColor1, ColorPicked1);
+
+        }
+
+        private void _pnlColor2_DoubleClick(object? sender, EventArgs e)
+        {
+
+            PictureChooser(_tbColor2, _pnlColor2, ColorPicked2);
+
+        }
+
+        private void _pnlColor3_DoubleClick(object? sender, EventArgs e)
+        {
+
+            PictureChooser(_tbColor3, _pnlColor3, ColorPicked3);
+
+        }
+        private void _pnlColor4_DoubleClick(object? sender, EventArgs e)
+        {
+
+            PictureChooser(_tbColor4, _pnlColor4, ColorPicked4);
+
+        }
+        private void _pnlColor5_DoubleClick(object? sender, EventArgs e)
+        {
+
+            PictureChooser(_tbColor5, _pnlColor5, ColorPicked5);
+
+        }
+        private void _pnlColor6_DoubleClick(object? sender, EventArgs e)
+        {
+
+            PictureChooser(_tbColor6, _pnlColor6, ColorPicked6);
+
+        }
+        private void _pnlColor7_DoubleClick(object? sender, EventArgs e)
+        {
+
+            PictureChooser(_tbColor7, _pnlColor7, ColorPicked7);
+
+        }
+        private void _pnlColor8_DoubleClick(object? sender, EventArgs e)
+        {
+
+            PictureChooser(_tbColor8, _pnlColor8, ColorPicked8);
+
+        }
 
         private void UCCommand_MouseMove(object? sender, MouseEventArgs e)
         {
@@ -337,14 +411,14 @@ namespace canva.UI_ELEMENTS
                 if (ColorMode.Instance.Get != EColorMode.NONE && ColorMode.Instance.Get != EColorMode.NO_IMG)
                     ColorMode.Instance.Set = EColorMode.NONE;
 
-                
+
             }
         }
         private void Instance_ColorModeChanged(object? sender, ColorModeEventArgs e)
         {
 
             UpdateColorMode(e.ColorMode);
-        
+
         }
 
         private void _btnColor8_Click(object? sender, MouseEventArgs e)
@@ -441,6 +515,23 @@ namespace canva.UI_ELEMENTS
         #endregion
 
 
+        private void PictureChooser(CvTextBox textbox, Panel panel, ColorPickedDelegate _colorPicked)
+        {
+
+            if (textbox.Text == "") return;
+
+            _cd.Color = panel.BackColor;
+
+            if (_cd.ShowDialog() == DialogResult.OK)
+            {
+                if (_cd.Color != panel.BackColor)
+                {
+                    _colorPicked(_cd.Color);
+                }
+            }
+
+        }
+
         private void UpdateColorMode(EColorMode? colorMode)
         {
 
@@ -516,14 +607,14 @@ namespace canva.UI_ELEMENTS
 
             AppDat.Instance.Color4 = color;
         }
-        
+
         public void ColorPicked5(Color color)
         {
             string hex = $"#{color.R:X2}{color.G:X2}{color.B:X2}";
             _tbColor5.Text = hex;
             _pnlColor5.BackColor = color;
 
-            //AppDat.Instance.Color5 = color;
+            AppDat.Instance.Color5 = color;
         }
         public void ColorPicked6(Color color)
         {
@@ -531,7 +622,7 @@ namespace canva.UI_ELEMENTS
             _tbColor6.Text = hex;
             _pnlColor6.BackColor = color;
 
-            //AppDat.Instance.Color6 = color;
+            AppDat.Instance.Color6 = color;
         }
         public void ColorPicked7(Color color)
         {
@@ -539,7 +630,7 @@ namespace canva.UI_ELEMENTS
             _tbColor7.Text = hex;
             _pnlColor7.BackColor = color;
 
-            //AppDat.Instance.Color7 = color;
+            AppDat.Instance.Color7 = color;
         }
         public void ColorPicked8(Color color)
         {
@@ -547,7 +638,7 @@ namespace canva.UI_ELEMENTS
             _tbColor8.Text = hex;
             _pnlColor8.BackColor = color;
 
-            //AppDat.Instance.Color8 = color;
+            AppDat.Instance.Color8 = color;
         }
 
         private void DisableAllButtons()
@@ -556,128 +647,61 @@ namespace canva.UI_ELEMENTS
             _btnColor2.SetButton(false, ButtonBitmaps.Instance.Disabled2);
             _btnColor3.SetButton(false, ButtonBitmaps.Instance.Disabled3);
             _btnColor4.SetButton(false, ButtonBitmaps.Instance.Disabled4);
-            _btnColor5.SetButton(false); //, ButtonBitmaps.Instance.Disabled4);
-            _btnColor6.SetButton(false); //, ButtonBitmaps.Instance.Disabled4);
-            _btnColor7.SetButton(false); //, ButtonBitmaps.Instance.Disabled4);
-            _btnColor8.SetButton(false); //, ButtonBitmaps.Instance.Disabled4);
+            _btnColor5.SetButton(false, ButtonBitmaps.Instance.Disabled5);
+            _btnColor6.SetButton(false, ButtonBitmaps.Instance.Disabled6);
+            _btnColor7.SetButton(false, ButtonBitmaps.Instance.Disabled7);
+            _btnColor8.SetButton(false, ButtonBitmaps.Instance.Disabled8);
         }
 
         private void EnableButtonByMode(EColorMode colorMode)
         {
             switch (colorMode)
             {
-                case EColorMode.NONE:   EnableAll();    break;
-                case EColorMode.COLOR1: Enable1();      break;
-                case EColorMode.COLOR2: Enable2();      break;
-                case EColorMode.COLOR3: Enable3();      break;
-                case EColorMode.COLOR4: Enable4();      break;
-                case EColorMode.COLOR5: Enable5();      break;
-                case EColorMode.COLOR6: Enable6();      break;
-                case EColorMode.COLOR7: Enable7();      break;
-                case EColorMode.COLOR8: Enable8();      break;
+                case EColorMode.NONE: EnableAllButtons(); break;
+                case EColorMode.NO_IMG: DisableAllButtons(); break;
+                default: EnableByColorMode(colorMode); break;
             }
         }
 
-        private void EnableAll()
+        private void EnableAllButtons()
         {
             _btnColor1.SetButton(true, ButtonBitmaps.Instance.Enabled1);
             _btnColor2.SetButton(true, ButtonBitmaps.Instance.Enabled2);
             _btnColor3.SetButton(true, ButtonBitmaps.Instance.Enabled3);
             _btnColor4.SetButton(true, ButtonBitmaps.Instance.Enabled4);
-            _btnColor5.SetButton(true); //, ButtonBitmaps.Instance.Enabled4);
-            _btnColor6.SetButton(true); //, ButtonBitmaps.Instance.Enabled4);
-            _btnColor7.SetButton(true); //, ButtonBitmaps.Instance.Enabled4);
-            _btnColor8.SetButton(true); //, ButtonBitmaps.Instance.Enabled4);
+            _btnColor5.SetButton(true, ButtonBitmaps.Instance.Enabled5);
+            _btnColor6.SetButton(true, ButtonBitmaps.Instance.Enabled6);
+            _btnColor7.SetButton(true, ButtonBitmaps.Instance.Enabled7);
+            _btnColor8.SetButton(true, ButtonBitmaps.Instance.Enabled8);
 
         }
 
-        private void Enable1()
+        private void EnableByColorMode(EColorMode colorMode)
         {
-            _btnColor1.SetButton(true, ButtonBitmaps.Instance.Enabled1);
-            _btnColor2.SetButton(false, ButtonBitmaps.Instance.Disabled2);
-            _btnColor3.SetButton(false, ButtonBitmaps.Instance.Disabled3);
-            _btnColor4.SetButton(false, ButtonBitmaps.Instance.Disabled4);
-            _btnColor5.SetButton(false); //, ButtonBitmaps.Instance.Disabled4);
-            _btnColor6.SetButton(false); //, ButtonBitmaps.Instance.Disabled4);
-            _btnColor7.SetButton(false); //, ButtonBitmaps.Instance.Disabled4);
-            _btnColor8.SetButton(false); //, ButtonBitmaps.Instance.Disabled4);
-        }
-        private void Enable2()
-        {
-            _btnColor1.SetButton(false, ButtonBitmaps.Instance.Disabled1);
-            _btnColor2.SetButton(true, ButtonBitmaps.Instance.Enabled2);
-            _btnColor3.SetButton(false, ButtonBitmaps.Instance.Disabled3);
-            _btnColor4.SetButton(false, ButtonBitmaps.Instance.Disabled4);
-            _btnColor5.SetButton(false); //, ButtonBitmaps.Instance.Disabled4);
-            _btnColor6.SetButton(false); //, ButtonBitmaps.Instance.Disabled4);
-            _btnColor7.SetButton(false); //, ButtonBitmaps.Instance.Disabled4);
-            _btnColor8.SetButton(false); //, ButtonBitmaps.Instance.Disabled4);
-        }
-        private void Enable3()
-        {
-            _btnColor1.SetButton(false, ButtonBitmaps.Instance.Disabled1);
-            _btnColor2.SetButton(false, ButtonBitmaps.Instance.Disabled2);
-            _btnColor3.SetButton(true, ButtonBitmaps.Instance.Enabled3);
-            _btnColor4.SetButton(false, ButtonBitmaps.Instance.Disabled4);
-            _btnColor5.SetButton(false); //, ButtonBitmaps.Instance.Disabled4);
-            _btnColor6.SetButton(false); //, ButtonBitmaps.Instance.Disabled4);
-            _btnColor7.SetButton(false); //, ButtonBitmaps.Instance.Disabled4);
-            _btnColor8.SetButton(false); //, ButtonBitmaps.Instance.Disabled4);
-        }
-        private void Enable4()
-        {
-            _btnColor1.SetButton(false, ButtonBitmaps.Instance.Disabled1);
-            _btnColor2.SetButton(false, ButtonBitmaps.Instance.Disabled2);
-            _btnColor3.SetButton(false, ButtonBitmaps.Instance.Disabled3);
-            _btnColor4.SetButton(true, ButtonBitmaps.Instance.Enabled4);
-            _btnColor5.SetButton(false); //, ButtonBitmaps.Instance.Enabled4);
-            _btnColor6.SetButton(false); //, ButtonBitmaps.Instance.Enabled4);
-            _btnColor7.SetButton(false); //, ButtonBitmaps.Instance.Enabled4);
-            _btnColor8.SetButton(false); //, ButtonBitmaps.Instance.Enabled4);
-        }
-        private void Enable5()
-        {
-            _btnColor1.SetButton(false, ButtonBitmaps.Instance.Disabled1);
-            _btnColor2.SetButton(false, ButtonBitmaps.Instance.Disabled2);
-            _btnColor3.SetButton(false, ButtonBitmaps.Instance.Disabled3);
-            _btnColor4.SetButton(false, ButtonBitmaps.Instance.Enabled4);
-            _btnColor5.SetButton(true); //, ButtonBitmaps.Instance.Enabled4);
-            _btnColor6.SetButton(false); //, ButtonBitmaps.Instance.Enabled4);
-            _btnColor7.SetButton(false); //, ButtonBitmaps.Instance.Enabled4);
-            _btnColor8.SetButton(false); //, ButtonBitmaps.Instance.Enabled4);
-        }
-        private void Enable6()
-        {
-            _btnColor1.SetButton(false, ButtonBitmaps.Instance.Disabled1);
-            _btnColor2.SetButton(false, ButtonBitmaps.Instance.Disabled2);
-            _btnColor3.SetButton(false, ButtonBitmaps.Instance.Disabled3);
-            _btnColor4.SetButton(false, ButtonBitmaps.Instance.Enabled4);
-            _btnColor5.SetButton(false); //, ButtonBitmaps.Instance.Enabled4);
-            _btnColor6.SetButton(true); //, ButtonBitmaps.Instance.Enabled4);
-            _btnColor7.SetButton(false); //, ButtonBitmaps.Instance.Enabled4);
-            _btnColor8.SetButton(false); //, ButtonBitmaps.Instance.Enabled4);
-        }
-        private void Enable7()
-        {
-            _btnColor1.SetButton(false, ButtonBitmaps.Instance.Disabled1);
-            _btnColor2.SetButton(false, ButtonBitmaps.Instance.Disabled2);
-            _btnColor3.SetButton(false, ButtonBitmaps.Instance.Disabled3);
-            _btnColor4.SetButton(false, ButtonBitmaps.Instance.Enabled4);
-            _btnColor5.SetButton(false); //, ButtonBitmaps.Instance.Enabled4);
-            _btnColor6.SetButton(false); //, ButtonBitmaps.Instance.Enabled4);
-            _btnColor7.SetButton(true); //, ButtonBitmaps.Instance.Enabled4);
-            _btnColor8.SetButton(false); //, ButtonBitmaps.Instance.Enabled4);
-        }
-        private void Enable8()
-        {
-            _btnColor1.SetButton(false, ButtonBitmaps.Instance.Disabled1);
-            _btnColor2.SetButton(false, ButtonBitmaps.Instance.Disabled2);
-            _btnColor3.SetButton(false, ButtonBitmaps.Instance.Disabled3);
-            _btnColor4.SetButton(false, ButtonBitmaps.Instance.Enabled4);
-            _btnColor5.SetButton(false); //, ButtonBitmaps.Instance.Enabled4);
-            _btnColor6.SetButton(false); //, ButtonBitmaps.Instance.Enabled4);
-            _btnColor7.SetButton(false); //, ButtonBitmaps.Instance.Enabled4);
-            _btnColor8.SetButton(true); //, ButtonBitmaps.Instance.Enabled4);
+            if (colorMode == EColorMode.COLOR1) _btnColor1.SetButton(true, ButtonBitmaps.Instance.Enabled1);
+            else _btnColor1.SetButton(false, ButtonBitmaps.Instance.Disabled1);
+
+            if (colorMode == EColorMode.COLOR2) _btnColor2.SetButton(true, ButtonBitmaps.Instance.Enabled2);
+            else _btnColor2.SetButton(false, ButtonBitmaps.Instance.Disabled2);
+
+            if (colorMode == EColorMode.COLOR3) _btnColor3.SetButton(true, ButtonBitmaps.Instance.Enabled3);
+            else _btnColor3.SetButton(false, ButtonBitmaps.Instance.Disabled3);
+
+            if (colorMode == EColorMode.COLOR4) _btnColor4.SetButton(true, ButtonBitmaps.Instance.Enabled4);
+            else _btnColor4.SetButton(false, ButtonBitmaps.Instance.Disabled4);
+
+            if (colorMode == EColorMode.COLOR5) _btnColor5.SetButton(true, ButtonBitmaps.Instance.Enabled5);
+            else _btnColor5.SetButton(false, ButtonBitmaps.Instance.Disabled5);
+
+            if (colorMode == EColorMode.COLOR6) _btnColor6.SetButton(true, ButtonBitmaps.Instance.Enabled6);
+            else _btnColor6.SetButton(false, ButtonBitmaps.Instance.Disabled6);
+
+            if (colorMode == EColorMode.COLOR7) _btnColor7.SetButton(true, ButtonBitmaps.Instance.Enabled7);
+            else _btnColor7.SetButton(false, ButtonBitmaps.Instance.Disabled7);
+
+            if (colorMode == EColorMode.COLOR8) _btnColor8.SetButton(true, ButtonBitmaps.Instance.Enabled8);
+            else _btnColor8.SetButton(false, ButtonBitmaps.Instance.Disabled8);
+
         }
 
         #endregion
@@ -686,6 +710,7 @@ namespace canva.UI_ELEMENTS
 
         #endregion
 
+        
     }
 
 

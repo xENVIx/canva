@@ -120,10 +120,11 @@
             Controls.Add(_pnlBtns);
             Controls.Add(_pnlCtrls);
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
+            MaximizeBox = false;
+            MinimizeBox = false;
             Name = "UserInterface";
             StartPosition = FormStartPosition.Manual;
             Text = "FrmMain";
-            TopMost = true;
             _pnlCtrls.ResumeLayout(false);
             _pnlBtns.ResumeLayout(false);
             ResumeLayout(false);

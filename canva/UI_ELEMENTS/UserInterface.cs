@@ -118,6 +118,26 @@ namespace canva.UI_ELEMENTS
                 _ucCmd.ColorPicked4(AppDat.Instance.Color4);
             }
 
+            if (AppDat.Instance.ColorSet(5))
+            {
+                _ucCmd.ColorPicked5(AppDat.Instance.Color5);
+            }
+
+            if (AppDat.Instance.ColorSet(6))
+            {
+                _ucCmd.ColorPicked6(AppDat.Instance.Color6);
+            }
+
+            if (AppDat.Instance.ColorSet(7))
+            {
+                _ucCmd.ColorPicked7(AppDat.Instance.Color7);
+            }
+
+            if (AppDat.Instance.ColorSet(8))
+            {
+                _ucCmd.ColorPicked8(AppDat.Instance.Color8);
+            }
+
         }
 
         #endregion
@@ -128,9 +148,9 @@ namespace canva.UI_ELEMENTS
         {
             InitializeComponent();
 
-            
 
 
+            this.KeyPreview = true;
 
             Assembly asm = Assembly.GetExecutingAssembly();
             using (Stream s = asm.GetManifestResourceStream("canva.ico.duck1.ico"))
@@ -161,6 +181,9 @@ namespace canva.UI_ELEMENTS
             this._ucCmd.OpenMenu += _ucCmd_OpenMenu;
 
 
+            
+
+
             ToolStripMenuItem op1 = new ToolStripMenuItem("Open AppData Folder");
             op1.Click += Op1_Click;
             _cmsOptions.Items.Add(op1);
@@ -185,6 +208,104 @@ namespace canva.UI_ELEMENTS
             ToolStripMenuItem op6 = new ToolStripMenuItem("Clear Image History...");
             op6.Click += Op6_Click;
             _cmsOptions.Items.Add(op6);
+
+            ToolStripMenuItem op7 = new ToolStripMenuItem("Toggle Always On Top");
+            op7.Click += Op7_Click;
+            _cmsOptions.Items.Add(op7);
+        }
+
+
+        protected override void OnKeyPress(KeyPressEventArgs e)
+        {
+
+            switch (e.KeyChar)
+            {
+                case '1':
+                    if (ColorMode.Instance.Get != EColorMode.NO_IMG)
+                    {
+                        if (ColorMode.Instance.Get == EColorMode.COLOR1) ColorMode.Instance.Set = EColorMode.NONE;
+                        else ColorMode.Instance.Set = EColorMode.COLOR1;
+
+                        e.Handled = true;
+                    }
+                    break; 
+                case '2':
+                    if (ColorMode.Instance.Get != EColorMode.NO_IMG)
+                    {
+                        if (ColorMode.Instance.Get == EColorMode.COLOR2) ColorMode.Instance.Set = EColorMode.NONE;
+                        else ColorMode.Instance.Set = EColorMode.COLOR2;
+
+                        e.Handled = true;
+                    }
+                    break; 
+                case '3':
+                    if (ColorMode.Instance.Get != EColorMode.NO_IMG)
+                    {
+                        if (ColorMode.Instance.Get == EColorMode.COLOR3) ColorMode.Instance.Set = EColorMode.NONE;
+                        else ColorMode.Instance.Set = EColorMode.COLOR3;
+
+                        e.Handled = true;
+                    }
+                    break; 
+                case '4':
+                    if (ColorMode.Instance.Get != EColorMode.NO_IMG)
+                    {
+                        if (ColorMode.Instance.Get == EColorMode.COLOR4) ColorMode.Instance.Set = EColorMode.NONE;
+                        else ColorMode.Instance.Set = EColorMode.COLOR4;
+
+                        e.Handled = true;
+                    }
+                    break; 
+                case '5':
+                    if (ColorMode.Instance.Get != EColorMode.NO_IMG)
+                    {
+                        if (ColorMode.Instance.Get == EColorMode.COLOR5) ColorMode.Instance.Set = EColorMode.NONE;
+                        else ColorMode.Instance.Set = EColorMode.COLOR5;
+
+                        e.Handled = true;
+                    }
+                    break; 
+                case '6':
+                    if (ColorMode.Instance.Get != EColorMode.NO_IMG)
+                    {
+                        if (ColorMode.Instance.Get == EColorMode.COLOR6) ColorMode.Instance.Set = EColorMode.NONE;
+                        else ColorMode.Instance.Set = EColorMode.COLOR6;
+
+                        e.Handled = true;
+                    }
+                    break; 
+                case '7':
+                    if (ColorMode.Instance.Get != EColorMode.NO_IMG)
+                    {
+                        if (ColorMode.Instance.Get == EColorMode.COLOR7) ColorMode.Instance.Set = EColorMode.NONE;
+                        else ColorMode.Instance.Set = EColorMode.COLOR7;
+
+                        e.Handled = true;
+                    }
+                    break; 
+                case '8':
+                    if (ColorMode.Instance.Get != EColorMode.NO_IMG)
+                    {
+                        if (ColorMode.Instance.Get == EColorMode.COLOR8) ColorMode.Instance.Set = EColorMode.NONE;
+                        else ColorMode.Instance.Set = EColorMode.COLOR8;
+
+                        e.Handled = true;
+                    }
+                    break;
+            }
+
+            
+            
+            
+            base.OnKeyPress(e);
+
+
+
+        }
+
+        private void Op7_Click(object? sender, EventArgs e)
+        {
+            this.TopMost = !this.TopMost;
         }
 
         private void Op6_Click(object? sender, EventArgs e)

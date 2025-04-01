@@ -64,6 +64,54 @@ namespace canva.DAT
                 _colorSet[3] = true;
             }
         }
+        public Color Color5
+        {
+            get
+            {
+                return _colors[4];
+            }
+            set
+            {
+                _colors[4] = value;
+                _colorSet[4] = true;
+            }
+        }
+        public Color Color6
+        {
+            get
+            {
+                return _colors[5];
+            }
+            set
+            {
+                _colors[5] = value;
+                _colorSet[5] = true;
+            }
+        }
+        public Color Color7
+        {
+            get
+            {
+                return _colors[6];
+            }
+            set
+            {
+                _colors[6] = value;
+                _colorSet[6] = true;
+            }
+        }
+        public Color Color8
+        {
+            get
+            {
+                return _colors[7];
+            }
+            set
+            {
+                _colors[7] = value;
+                _colorSet[7] = true;
+            }
+        }
 
 
 
@@ -90,8 +138,8 @@ namespace canva.DAT
             }
         }
 
-        private Color[] _colors = new Color[4];
-        private bool[] _colorSet = new bool[4];
+        private Color[] _colors = new Color[8];
+        private bool[] _colorSet = new bool[8];
 
         private static AppDat _instance = new AppDat();
 

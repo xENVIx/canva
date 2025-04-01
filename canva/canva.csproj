@@ -30,10 +30,18 @@
     <None Remove="ico\ic02.ico" />
     <None Remove="ico\ic03.ico" />
     <None Remove="ico\ic04.ico" />
+    <None Remove="ico\ic05.ico" />
+    <None Remove="ico\ic06.ico" />
+    <None Remove="ico\ic07.ico" />
+    <None Remove="ico\ic08.ico" />
     <None Remove="ico\ico1.ico" />
     <None Remove="ico\ico2.ico" />
     <None Remove="ico\ico3.ico" />
     <None Remove="ico\ico4.ico" />
+    <None Remove="ico\ico5.ico" />
+    <None Remove="ico\ico6.ico" />
+    <None Remove="ico\ico7.ico" />
+    <None Remove="ico\ico8.ico" />
     <None Remove="ttf\stencilla.ttf" />
   </ItemGroup>
 
@@ -57,10 +65,18 @@
     <EmbeddedResource Include="ico\ic02.ico" />
     <EmbeddedResource Include="ico\ic03.ico" />
     <EmbeddedResource Include="ico\ic04.ico" />
+    <EmbeddedResource Include="ico\ic05.ico" />
+    <EmbeddedResource Include="ico\ic06.ico" />
+    <EmbeddedResource Include="ico\ic07.ico" />
+    <EmbeddedResource Include="ico\ic08.ico" />
     <EmbeddedResource Include="ico\ico1.ico" />
     <EmbeddedResource Include="ico\ico2.ico" />
     <EmbeddedResource Include="ico\ico3.ico" />
     <EmbeddedResource Include="ico\ico4.ico" />
+    <EmbeddedResource Include="ico\ico5.ico" />
+    <EmbeddedResource Include="ico\ico6.ico" />
+    <EmbeddedResource Include="ico\ico7.ico" />
+    <EmbeddedResource Include="ico\ico8.ico" />
     <EmbeddedResource Include="ttf\stencilla.ttf" />
   </ItemGroup>
 
