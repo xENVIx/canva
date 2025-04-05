@@ -24,6 +24,439 @@ namespace canva.UI_ELEMENTS
 
         #region PUBLIC
 
+        #region CONSTRUCTORS
+
+
+
+        public UserInterface()
+        {
+            InitializeComponent();
+
+
+            _menuStrip = new MenuStrip();
+            _menuStrip.SuspendLayout();
+
+
+
+            this.Controls.Add(_menuStrip);
+
+
+            _menuStrip.ResumeLayout(false);
+
+            if (_menuStripShown)
+            {
+                _menuStrip.Show();
+                _menuStrip.Visible = false;
+            }
+            else
+            {
+                _menuStrip.Hide();
+                _menuStrip.Visible = false;
+            }
+
+
+            this.KeyPreview = true;
+            
+
+            Assembly asm = Assembly.GetExecutingAssembly();
+            using (Stream s = asm.GetManifestResourceStream("canva.ico.duck1.ico"))
+            {
+                this.Icon = new Icon(s);
+            }
+
+
+
+            if (Config.Instance == null) this.Text = "♥ C A N V A ♥";
+            else this.Text = Config.Instance.AppTitle;
+
+
+            this.Load += FrmMain_Load;
+
+
+
+            this.BackColor = Config.Instance.BackgroundColor;
+
+
+
+            this._btnPaste.Click += _btnPaste_Click;
+            this._btnClose.Click += _btnClose_Click;
+
+
+            this._ucCnva.ColorPicked += _ucCnva_ColorPicked;
+
+            //this._ucCmd.OpenMenu += _ucCmd_OpenMenu;
+
+
+            _cms.Opening += _cms_Opening;
+            
+
+
+
+            foreach (E_CMS_OP op in typeof(E_CMS_OP).GetEnumValues())
+            {
+                ToolStripMenuItem? item = null;
+                ToolStripMenuItem? item2 = null;
+                switch (op)
+                {
+                    case E_CMS_OP.OPEN_APPDATA:
+                        item = new ToolStripMenuItem("Open AppData Folder");
+                        item.Click += _cmsItemAppDataClick;
+                        item2 = new ToolStripMenuItem("Open AppData Folder");
+                        item2.Click += _cmsItemAppDataClick;
+                        break;
+                    case E_CMS_OP.TOGGLE_ON_TOP:
+                        item = new ToolStripMenuItem("Toggle Always On Top");
+                        item.Click += _cmsItemToggleOnTopClick;
+                        item2 = new ToolStripMenuItem("Toggle Always On Top");
+                        item2.Click += _cmsItemToggleOnTopClick;
+                        break;
+                    case E_CMS_OP.PASTE_CLIPBOARD:
+                        item = new ToolStripMenuItem("Paste Clipboard");
+                        item.Click += _cmsItemPasteClipboardClick;
+                        item2 = new ToolStripMenuItem("Paste Clipboard");
+                        item2.Click += _cmsItemPasteClipboardClick;
+                        break;
+                    case E_CMS_OP.TOGGLE_ORIENT:
+                        item = new ToolStripMenuItem("Toggle Orientation");
+                        item.Click += _cmsItemToggleOrientClick;
+                        item2 = new ToolStripMenuItem("Toggle Orientation");
+                        item2.Click += _cmsItemToggleOrientClick;
+                        break;
+                    case E_CMS_OP.CLR_IMG_HISTORY:
+                        item = new ToolStripMenuItem("Clear Image History");
+                        item.Click += _cmsItemClearImageHistoryClick;
+                        item2 = new ToolStripMenuItem("Clear Image History");
+                        item2.Click += _cmsItemClearImageHistoryClick;
+                        break;
+                    case E_CMS_OP.TOGGLE_CACHE_IMAGES:
+                        item = new ToolStripMenuItem("Toggle Image Cache");
+                        item.Click += _cmsItemToggleImageCacheClick;
+                        item2 = new ToolStripMenuItem("Toggle Image Cache");
+                        item2.Click += _cmsItemToggleImageCacheClick;
+                        break;
+                    case E_CMS_OP.EXIT_APP:
+                        item = new ToolStripMenuItem("Exit...");
+                        item.Click += _cmsItemExitAppClicked;
+                        item2 = new ToolStripMenuItem("Exit...");
+                        item2.Click += _cmsItemExitAppClicked;
+                        break;
+                }
+
+
+                if (item == null || item2 == null) continue;
+
+                
+
+                item.Tag = op;
+                item2.Tag = op;
+
+                _menuStripOptionFile.DropDownItems.Add((ToolStripMenuItem)item);
+                _cms.Items.Add((ToolStripMenuItem)item2);
+            }
+
+            _menuStripOptionFile.DropDown.Opening += _menuStripOptionFile_Opening;
+
+
+            _menuStrip.Items.Add(_menuStripOptionFile);
+
+
+
+        }
+
+        private void _cms_Opening(object? sender, CancelEventArgs e)
+        {
+            MenuOpening(_cms.Items);
+        }
+
+        protected override void WndProc(ref Message m)
+        {
+            //const int WM_LBUTTONDOWN = 0x0201;
+            const int WM_RBUTTONDOWN = 0x0204;
+            const int WM_PARENTNOTIFY = 0x0210;
+
+            Console.WriteLine("LOG WndProc");
+            Console.WriteLine(m.Msg.ToString());
+
+
+            if (m.Msg == WM_PARENTNOTIFY)
+            {
+                int eventType = m.WParam.ToInt32() & 0xFFFF;
+                if (eventType == WM_RBUTTONDOWN)
+                {
+                    Point clientPos = new Point(m.LParam.ToInt32());
+                    Point screenPos = this.PointToScreen(clientPos);
+
+                    Console.WriteLine($"Click detected at {screenPos}");
+
+                    if (ColorMode.Instance.Get == EColorMode.NONE || ColorMode.Instance.Get == EColorMode.NO_IMG)
+                    {
+                        //ShowAsContextMenu(screenPos);
+                        _cms.Show(screenPos);
+
+                    }
+                }
+            }
+
+
+            base.WndProc(ref m);
+        }
+
+        private ContextMenuStrip _cms = new ContextMenuStrip();
+        private void ShowAsContextMenu(Point location)
+        {
+            
+        }
+
+
+
+        private void _cmsItemExitAppClicked(object? sender, EventArgs e)
+        {
+
+            CloseApp();
+
+        }
+
+        private void MenuOpening(ToolStripItemCollection items)
+        {
+
+            foreach (ToolStripMenuItem item in items)
+            {
+                if (item == null || item.Tag == null) continue;
+
+                if (item.Tag.GetType() == typeof(E_CMS_OP))
+                {
+                    E_CMS_OP tag = (E_CMS_OP)item.Tag;
+                    String text = "";
+                    switch (tag)
+                    {
+                        case E_CMS_OP.TOGGLE_CACHE_IMAGES:
+                            if (Config.Instance.CacheImages) text = "Disable";
+                            else text = "Enable";
+
+                            item.Text = $"{text} Cached Images";
+                            break;
+
+                        case E_CMS_OP.TOGGLE_ORIENT:
+                            switch (Config.Instance.AppOrientation)
+                            {
+                                case EAppOrientation.HORIZONTAL:
+                                    text = "Switch To Vertical";
+                                    break;
+                                case EAppOrientation.VERTICAL:
+                                    text = "Switch To Horizontal";
+                                    break;
+                                default: text = "err"; break;
+                            }
+
+                            item.Text = text;
+                            break;
+
+                        case E_CMS_OP.TOGGLE_ON_TOP:
+                            if (Config.Instance.AlwaysOnTop) text = "Disable";
+                            else text = "Enable";
+
+                            item.Text = $"{text} Always On Top";
+
+                            break;
+
+
+                        default: continue;
+                    }
+                }
+            }
+        }
+
+        private void _menuStripOptionFile_Opening(object? sender, CancelEventArgs e)
+        {
+
+            MenuOpening(_menuStripOptionFile.DropDownItems);
+        }
+
+        private void _cmsItemToggleImageCacheClick(object? sender, EventArgs e)
+        {
+            try
+            {
+                Config.Instance.CacheImages = !Config.Instance.CacheImages;
+                Config.Instance.SaveData();
+            }
+            catch (Exception ex)
+            {
+                MyMessageBox.ShowError($"Could Not Save Config Data: {ex.Message}");
+            }
+        }
+
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.F1)
+            {
+
+                if (_menuStripShown)
+                {
+                    _menuStrip.Hide();
+                    _menuStrip.Visible = false;
+                    _menuStripShown = false;
+                }
+                else
+                {
+                    _menuStrip.Show();
+                    _menuStrip.Visible = true;
+                    _menuStripShown = true;
+                }
+
+                e.Handled = true;
+            }
+            else
+            {
+
+                base.OnKeyDown(e);
+            }
+        }
+
+        protected override void OnKeyPress(KeyPressEventArgs e)
+        {
+
+            switch (e.KeyChar)
+            {
+                case '1':
+                    if (ColorMode.Instance.Get != EColorMode.NO_IMG)
+                    {
+                        if (ColorMode.Instance.Get == EColorMode.COLOR1) ColorMode.Instance.Set = EColorMode.NONE;
+                        else ColorMode.Instance.Set = EColorMode.COLOR1;
+
+                        e.Handled = true;
+                    }
+                    break;
+                case '2':
+                    if (ColorMode.Instance.Get != EColorMode.NO_IMG)
+                    {
+                        if (ColorMode.Instance.Get == EColorMode.COLOR2) ColorMode.Instance.Set = EColorMode.NONE;
+                        else ColorMode.Instance.Set = EColorMode.COLOR2;
+
+                        e.Handled = true;
+                    }
+                    break;
+                case '3':
+                    if (ColorMode.Instance.Get != EColorMode.NO_IMG)
+                    {
+                        if (ColorMode.Instance.Get == EColorMode.COLOR3) ColorMode.Instance.Set = EColorMode.NONE;
+                        else ColorMode.Instance.Set = EColorMode.COLOR3;
+
+                        e.Handled = true;
+                    }
+                    break;
+                case '4':
+                    if (ColorMode.Instance.Get != EColorMode.NO_IMG)
+                    {
+                        if (ColorMode.Instance.Get == EColorMode.COLOR4) ColorMode.Instance.Set = EColorMode.NONE;
+                        else ColorMode.Instance.Set = EColorMode.COLOR4;
+
+                        e.Handled = true;
+                    }
+                    break;
+                case '5':
+                    if (ColorMode.Instance.Get != EColorMode.NO_IMG)
+                    {
+                        if (ColorMode.Instance.Get == EColorMode.COLOR5) ColorMode.Instance.Set = EColorMode.NONE;
+                        else ColorMode.Instance.Set = EColorMode.COLOR5;
+
+                        e.Handled = true;
+                    }
+                    break;
+                case '6':
+                    if (ColorMode.Instance.Get != EColorMode.NO_IMG)
+                    {
+                        if (ColorMode.Instance.Get == EColorMode.COLOR6) ColorMode.Instance.Set = EColorMode.NONE;
+                        else ColorMode.Instance.Set = EColorMode.COLOR6;
+
+                        e.Handled = true;
+                    }
+                    break;
+                case '7':
+                    if (ColorMode.Instance.Get != EColorMode.NO_IMG)
+                    {
+                        if (ColorMode.Instance.Get == EColorMode.COLOR7) ColorMode.Instance.Set = EColorMode.NONE;
+                        else ColorMode.Instance.Set = EColorMode.COLOR7;
+
+                        e.Handled = true;
+                    }
+                    break;
+                case '8':
+                    if (ColorMode.Instance.Get != EColorMode.NO_IMG)
+                    {
+                        if (ColorMode.Instance.Get == EColorMode.COLOR8) ColorMode.Instance.Set = EColorMode.NONE;
+                        else ColorMode.Instance.Set = EColorMode.COLOR8;
+
+                        e.Handled = true;
+                    }
+                    break;
+            }
+
+
+
+
+            base.OnKeyPress(e);
+
+
+
+        }
+
+        private void _cmsItemToggleOnTopClick(object? sender, EventArgs e)
+        {
+            this.TopMost = !this.TopMost;
+
+            Config.Instance.AlwaysOnTop = this.TopMost;
+
+            try
+            {
+                Config.Instance.SaveData();
+            }
+            catch (Exception ex)
+            {
+                MyMessageBox.ShowError(ex);
+            }
+        }
+
+        private void _cmsItemClearImageHistoryClick(object? sender, EventArgs e)
+        {
+            SavedImages.Instance.ClearMemory();
+        }
+
+        private void Op5_Click(object? sender, EventArgs e)
+        {
+            //_ucCnva.PasteClipboard(SavedImages.Instance.GetNextImage.ImageFile);
+            SavedImages.Instance.LoadNextImage();
+        }
+
+        private void Op4_Click(object? sender, EventArgs e)
+        {
+
+            //_ucCnva.PasteClipboard(SavedImages.Instance.GetPreviousImage.ImageFile);
+            SavedImages.Instance.LoadPreviousImage();
+        }
+
+
+
+        private void _cmsItemToggleOrientClick(object? sender, EventArgs e)
+        {
+
+            Program.ToggleAppOrient = true;
+
+            base.Close();
+            base.Dispose();
+
+            return;
+
+        }
+
+
+
+
+
+
+
+        #endregion
+
         #region VARIABLES
 
         #region STATIC
@@ -154,301 +587,6 @@ namespace canva.UI_ELEMENTS
 
         #endregion
 
-        #region CONSTRUCTORS
-
-        
-
-        public UserInterface()
-        {
-            InitializeComponent();
-
-
-
-            this.KeyPreview = true;
-
-            Assembly asm = Assembly.GetExecutingAssembly();
-            using (Stream s = asm.GetManifestResourceStream("canva.ico.duck1.ico"))
-            {
-                this.Icon = new Icon(s);
-            }
-
-
-
-            if (Config.Instance == null) this.Text = "♥ C A N V A ♥";
-            else this.Text = Config.Instance.AppTitle;
-
-
-            this.Load += FrmMain_Load;
-
-
-
-            this.BackColor = Config.Instance.BackgroundColor;
-
-
-
-            this._btnPaste.Click += _btnPaste_Click;
-            this._btnClose.Click += _btnClose_Click;
-
-
-            this._ucCnva.ColorPicked += _ucCnva_ColorPicked;
-
-            this._ucCmd.OpenMenu += _ucCmd_OpenMenu;
-
-
-
-            foreach (E_CMS_OP op in typeof(E_CMS_OP).GetEnumValues())
-            {
-                ToolStripMenuItem? item = null;
-                switch (op)
-                {
-                    case E_CMS_OP.OPEN_APPDATA:
-                        item = new ToolStripMenuItem("Open AppData Folder");
-                        item.Click += _cmsItemAppDataClick;
-                        break;
-                    case E_CMS_OP.TOGGLE_ON_TOP:
-                        item = new ToolStripMenuItem("Toggle Always On Top");
-                        item.Click += _cmsItemToggleOnTopClick;
-                        break;
-                    case E_CMS_OP.PASTE_CLIPBOARD:
-                        item = new ToolStripMenuItem("Paste Clipboard");
-                        item.Click += _cmsItemPasteClipboardClick;
-                        break;
-                    case E_CMS_OP.TOGGLE_ORIENT:
-                        item = new ToolStripMenuItem("Toggle Orientation");
-                        item.Click += _cmsItemToggleOrientClick;
-                        break;
-                    case E_CMS_OP.CLR_IMG_HISTORY:
-                        item = new ToolStripMenuItem("Clear Image History");
-                        item.Click += _cmsItemClearImageHistoryClick;
-                        break;
-                    case E_CMS_OP.TOGGLE_CACHE_IMAGES:
-                        item = new ToolStripMenuItem("Toggle Image Cache");
-                        item.Click += _cmsItemToggleImageCacheClick;
-                        break;
-                }
-
-
-                if (item == null) continue;
-
-                item.Tag = op;
-                _cmsOptions.Items.Add((ToolStripMenuItem)item);
-            }
-            
-            _cmsOptions.Opening += _cmsOptions_Opening;
-        }
-
-        private void _cmsItemToggleImageCacheClick(object? sender, EventArgs e)
-        {
-            try
-            {
-                Config.Instance.CacheImages = !Config.Instance.CacheImages;
-                Config.Instance.SaveData();
-            }
-            catch (Exception ex)
-            {
-                MyMessageBox.ShowError($"Could Not Save Config Data: {ex.Message}");
-            }
-        }
-
-        private void _cmsOptions_Opening(object? sender, CancelEventArgs e)
-        {
-
-            foreach (ToolStripMenuItem item in _cmsOptions.Items)
-            {
-                if (item == null || item.Tag == null) continue;
-
-                if (item.Tag.GetType() == typeof(E_CMS_OP))
-                {
-                    E_CMS_OP tag = (E_CMS_OP)item.Tag;
-                    String text = "";
-                    switch (tag)
-                    {
-                        case E_CMS_OP.TOGGLE_CACHE_IMAGES:
-                            if (Config.Instance.CacheImages) text = "Disable";
-                            else text = "Enable";
-
-                            item.Text = $"{text} Cached Images";
-                            break;
-
-                        case E_CMS_OP.TOGGLE_ORIENT:
-                            switch (Config.Instance.AppOrientation)
-                            {
-                                case EAppOrientation.HORIZONTAL:
-                                    text = "Switch To Vertical";
-                                    break;
-                                case EAppOrientation.VERTICAL:
-                                    text = "Switch To Horizontal";
-                                    break;
-                                default: text = "err"; break;
-                            }
-
-                            item.Text = text;
-                            break;
-
-                        case E_CMS_OP.TOGGLE_ON_TOP:
-                            if (Config.Instance.AlwaysOnTop) text = "Disable";
-                            else text = "Enable";
-
-                            item.Text = $"{text} Always On Top";
-
-                            break;
-
-
-                        default: continue;
-                    }
-                }
-            }
-
-        }
-
-        
-
-        protected override void OnKeyPress(KeyPressEventArgs e)
-        {
-
-            switch (e.KeyChar)
-            {
-                case '1':
-                    if (ColorMode.Instance.Get != EColorMode.NO_IMG)
-                    {
-                        if (ColorMode.Instance.Get == EColorMode.COLOR1) ColorMode.Instance.Set = EColorMode.NONE;
-                        else ColorMode.Instance.Set = EColorMode.COLOR1;
-
-                        e.Handled = true;
-                    }
-                    break; 
-                case '2':
-                    if (ColorMode.Instance.Get != EColorMode.NO_IMG)
-                    {
-                        if (ColorMode.Instance.Get == EColorMode.COLOR2) ColorMode.Instance.Set = EColorMode.NONE;
-                        else ColorMode.Instance.Set = EColorMode.COLOR2;
-
-                        e.Handled = true;
-                    }
-                    break; 
-                case '3':
-                    if (ColorMode.Instance.Get != EColorMode.NO_IMG)
-                    {
-                        if (ColorMode.Instance.Get == EColorMode.COLOR3) ColorMode.Instance.Set = EColorMode.NONE;
-                        else ColorMode.Instance.Set = EColorMode.COLOR3;
-
-                        e.Handled = true;
-                    }
-                    break; 
-                case '4':
-                    if (ColorMode.Instance.Get != EColorMode.NO_IMG)
-                    {
-                        if (ColorMode.Instance.Get == EColorMode.COLOR4) ColorMode.Instance.Set = EColorMode.NONE;
-                        else ColorMode.Instance.Set = EColorMode.COLOR4;
-
-                        e.Handled = true;
-                    }
-                    break; 
-                case '5':
-                    if (ColorMode.Instance.Get != EColorMode.NO_IMG)
-                    {
-                        if (ColorMode.Instance.Get == EColorMode.COLOR5) ColorMode.Instance.Set = EColorMode.NONE;
-                        else ColorMode.Instance.Set = EColorMode.COLOR5;
-
-                        e.Handled = true;
-                    }
-                    break; 
-                case '6':
-                    if (ColorMode.Instance.Get != EColorMode.NO_IMG)
-                    {
-                        if (ColorMode.Instance.Get == EColorMode.COLOR6) ColorMode.Instance.Set = EColorMode.NONE;
-                        else ColorMode.Instance.Set = EColorMode.COLOR6;
-
-                        e.Handled = true;
-                    }
-                    break; 
-                case '7':
-                    if (ColorMode.Instance.Get != EColorMode.NO_IMG)
-                    {
-                        if (ColorMode.Instance.Get == EColorMode.COLOR7) ColorMode.Instance.Set = EColorMode.NONE;
-                        else ColorMode.Instance.Set = EColorMode.COLOR7;
-
-                        e.Handled = true;
-                    }
-                    break; 
-                case '8':
-                    if (ColorMode.Instance.Get != EColorMode.NO_IMG)
-                    {
-                        if (ColorMode.Instance.Get == EColorMode.COLOR8) ColorMode.Instance.Set = EColorMode.NONE;
-                        else ColorMode.Instance.Set = EColorMode.COLOR8;
-
-                        e.Handled = true;
-                    }
-                    break;
-            }
-
-            
-            
-            
-            base.OnKeyPress(e);
-
-
-
-        }
-
-        private void _cmsItemToggleOnTopClick(object? sender, EventArgs e)
-        {
-            this.TopMost = !this.TopMost;
-
-            Config.Instance.AlwaysOnTop = this.TopMost;
-            
-            try
-            {
-                Config.Instance.SaveData();
-            }
-            catch (Exception ex)
-            {
-                MyMessageBox.ShowError(ex);
-            }
-        }
-
-        private void _cmsItemClearImageHistoryClick(object? sender, EventArgs e)
-        {
-            SavedImages.Instance.ClearMemory();
-        }
-
-        private void Op5_Click(object? sender, EventArgs e)
-        {
-            //_ucCnva.PasteClipboard(SavedImages.Instance.GetNextImage.ImageFile);
-            SavedImages.Instance.LoadNextImage();
-        }
-
-        private void Op4_Click(object? sender, EventArgs e)
-        {
-
-            //_ucCnva.PasteClipboard(SavedImages.Instance.GetPreviousImage.ImageFile);
-            SavedImages.Instance.LoadPreviousImage();
-        }
-
-
-
-        private void _cmsItemToggleOrientClick(object? sender, EventArgs e)
-        {
-
-            _cmsOptions.Hide();
-
-            Program.ToggleAppOrient = true;
-
-            base.Close();
-            base.Dispose();
-
-            return;
-
-        }
-
-
-
-
-
-
-
-        #endregion
-
         #endregion
 
         #region PROTECTED
@@ -472,6 +610,8 @@ namespace canva.UI_ELEMENTS
             
 
             CLR_IMG_HISTORY,
+
+            EXIT_APP,
         }
 
         #endregion
@@ -484,7 +624,6 @@ namespace canva.UI_ELEMENTS
         private void _cmsItemPasteClipboardClick(object? sender, EventArgs e)
         {
             PasteClipboard();
-            _cmsOptions.Close();
 
         }
         private void _cmsItemAppDataClick(object? sender, EventArgs e)
@@ -492,15 +631,8 @@ namespace canva.UI_ELEMENTS
 
             LibUtil.DirectoryUtl.OpenDirectory(Program.appDataFolder, "Config.xml");
 
-            _cmsOptions.Hide();
         }
 
-        private void _ucCmd_OpenMenu(object? sender, OpenMenuEventArgs e)
-        {
-
-            _cmsOptions.Show(e.MouseLocation);
-
-        }
 
         private void _ucCnva_ColorPicked(object? sender, Classes.ColorPickedEventArgs e)
         {
@@ -510,12 +642,7 @@ namespace canva.UI_ELEMENTS
         private void _btnClose_Click(object? sender, EventArgs e)
         {
 
-            if (MyMessageBox.ShowAskQuestion("Do you want to close the app?", "Confirm Application Close") == DialogResult.Yes)
-            {
-                this.Close();
-                this.Dispose();
-                return;
-            }
+            CloseApp();
 
         }
 
@@ -552,6 +679,18 @@ namespace canva.UI_ELEMENTS
 
 
         #endregion
+
+        private void CloseApp()
+        {
+
+            //if (MyMessageBox.ShowAskQuestion(this, "Do you want to close the app?", "Confirm Application Close") == DialogResult.Yes)
+            //{
+                this.Close();
+                this.Dispose();
+                return;
+            //}
+
+        }
 
         private void PasteClipboard()
         {
@@ -594,6 +733,10 @@ namespace canva.UI_ELEMENTS
 
 
         #endregion
+
+        private ToolStripMenuItem _menuStripOptionFile = new ToolStripMenuItem("File");
+        private MenuStrip _menuStrip = new MenuStrip();
+        private bool _menuStripShown = false;
 
         #endregion
 

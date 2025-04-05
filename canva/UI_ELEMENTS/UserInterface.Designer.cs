@@ -35,7 +35,6 @@
             _pnlBtns = new Panel();
             _btnClose = new CvButton();
             _btnPaste = new CvButton();
-            _cmsOptions = new ContextMenuStrip(components);
             _pnlCtrls.SuspendLayout();
             _pnlBtns.SuspendLayout();
             SuspendLayout();
@@ -105,11 +104,7 @@
             _btnPaste.TabIndex = 0;
             _btnPaste.Text = "Paste Image";
             _btnPaste.UseVisualStyleBackColor = false;
-            // 
-            // _cmsOptions
-            // 
-            _cmsOptions.Name = "contextMenuStrip1";
-            _cmsOptions.Size = new Size(61, 4);
+            
             // 
             // UserInterface
             // 
@@ -139,6 +134,6 @@
         protected Panel _pnlBtns;
         protected UI_ELEMENTS.CvButton _btnClose;
         protected UI_ELEMENTS.CvButton _btnPaste;
-        private ContextMenuStrip _cmsOptions;
+        //private ContextMenuStrip _cmsOptions;
     }
 }
