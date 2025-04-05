@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Text;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -91,6 +92,17 @@ namespace canva.UI_ELEMENTS
                 default: throw new Exception("Could not toggle app orientation");
                     
             }
+
+            Config.Instance.AppOrientation = _appOrient;
+
+            try
+            {
+                Config.Instance.SaveData();
+            }
+            catch (Exception ex)
+            {
+                MyMessageBox.ShowError(ex);
+            }
         }
 
         #endregion
@@ -144,6 +156,8 @@ namespace canva.UI_ELEMENTS
 
         #region CONSTRUCTORS
 
+        
+
         public UserInterface()
         {
             InitializeComponent();
@@ -181,39 +195,113 @@ namespace canva.UI_ELEMENTS
             this._ucCmd.OpenMenu += _ucCmd_OpenMenu;
 
 
+
+            foreach (E_CMS_OP op in typeof(E_CMS_OP).GetEnumValues())
+            {
+                ToolStripMenuItem? item = null;
+                switch (op)
+                {
+                    case E_CMS_OP.OPEN_APPDATA:
+                        item = new ToolStripMenuItem("Open AppData Folder");
+                        item.Click += _cmsItemAppDataClick;
+                        break;
+                    case E_CMS_OP.TOGGLE_ON_TOP:
+                        item = new ToolStripMenuItem("Toggle Always On Top");
+                        item.Click += _cmsItemToggleOnTopClick;
+                        break;
+                    case E_CMS_OP.PASTE_CLIPBOARD:
+                        item = new ToolStripMenuItem("Paste Clipboard");
+                        item.Click += _cmsItemPasteClipboardClick;
+                        break;
+                    case E_CMS_OP.TOGGLE_ORIENT:
+                        item = new ToolStripMenuItem("Toggle Orientation");
+                        item.Click += _cmsItemToggleOrientClick;
+                        break;
+                    case E_CMS_OP.CLR_IMG_HISTORY:
+                        item = new ToolStripMenuItem("Clear Image History");
+                        item.Click += _cmsItemClearImageHistoryClick;
+                        break;
+                    case E_CMS_OP.TOGGLE_CACHE_IMAGES:
+                        item = new ToolStripMenuItem("Toggle Image Cache");
+                        item.Click += _cmsItemToggleImageCacheClick;
+                        break;
+                }
+
+
+                if (item == null) continue;
+
+                item.Tag = op;
+                _cmsOptions.Items.Add((ToolStripMenuItem)item);
+            }
             
-
-
-            ToolStripMenuItem op1 = new ToolStripMenuItem("Open AppData Folder");
-            op1.Click += Op1_Click;
-            _cmsOptions.Items.Add(op1);
-
-            ToolStripMenuItem op2 = new ToolStripMenuItem("Paste Clipboard");
-            op2.Click += Op2_Click;
-            _cmsOptions.Items.Add(op2);
-
-
-            ToolStripMenuItem op3 = new ToolStripMenuItem("Toggle Orientation");
-            op3.Click += Op3_Click;
-            _cmsOptions.Items.Add(op3);
-
-            //ToolStripMenuItem op4 = new ToolStripMenuItem("Load Previous Image...");
-            //op4.Click += Op4_Click;
-            //_cmsOptions.Items.Add(op4);
-
-            //ToolStripMenuItem op5 = new ToolStripMenuItem("Load Next Image...");
-            //op5.Click += Op5_Click;
-            //_cmsOptions.Items.Add(op5);
-
-            ToolStripMenuItem op6 = new ToolStripMenuItem("Clear Image History...");
-            op6.Click += Op6_Click;
-            _cmsOptions.Items.Add(op6);
-
-            ToolStripMenuItem op7 = new ToolStripMenuItem("Toggle Always On Top");
-            op7.Click += Op7_Click;
-            _cmsOptions.Items.Add(op7);
+            _cmsOptions.Opening += _cmsOptions_Opening;
         }
 
+        private void _cmsItemToggleImageCacheClick(object? sender, EventArgs e)
+        {
+            try
+            {
+                Config.Instance.CacheImages = !Config.Instance.CacheImages;
+                Config.Instance.SaveData();
+            }
+            catch (Exception ex)
+            {
+                MyMessageBox.ShowError($"Could Not Save Config Data: {ex.Message}");
+            }
+        }
+
+        private void _cmsOptions_Opening(object? sender, CancelEventArgs e)
+        {
+
+            foreach (ToolStripMenuItem item in _cmsOptions.Items)
+            {
+                if (item == null || item.Tag == null) continue;
+
+                if (item.Tag.GetType() == typeof(E_CMS_OP))
+                {
+                    E_CMS_OP tag = (E_CMS_OP)item.Tag;
+                    String text = "";
+                    switch (tag)
+                    {
+                        case E_CMS_OP.TOGGLE_CACHE_IMAGES:
+                            if (Config.Instance.CacheImages) text = "Disable";
+                            else text = "Enable";
+
+                            item.Text = $"{text} Cached Images";
+                            break;
+
+                        case E_CMS_OP.TOGGLE_ORIENT:
+                            switch (Config.Instance.AppOrientation)
+                            {
+                                case EAppOrientation.HORIZONTAL:
+                                    text = "Switch To Vertical";
+                                    break;
+                                case EAppOrientation.VERTICAL:
+                                    text = "Switch To Horizontal";
+                                    break;
+                                default: text = "err"; break;
+                            }
+
+                            item.Text = text;
+                            break;
+
+                        case E_CMS_OP.TOGGLE_ON_TOP:
+                            if (Config.Instance.AlwaysOnTop) text = "Disable";
+                            else text = "Enable";
+
+                            item.Text = $"{text} Always On Top";
+
+                            break;
+
+
+                        default: continue;
+                    }
+                }
+            }
+
+        }
+
+        
 
         protected override void OnKeyPress(KeyPressEventArgs e)
         {
@@ -303,12 +391,23 @@ namespace canva.UI_ELEMENTS
 
         }
 
-        private void Op7_Click(object? sender, EventArgs e)
+        private void _cmsItemToggleOnTopClick(object? sender, EventArgs e)
         {
             this.TopMost = !this.TopMost;
+
+            Config.Instance.AlwaysOnTop = this.TopMost;
+            
+            try
+            {
+                Config.Instance.SaveData();
+            }
+            catch (Exception ex)
+            {
+                MyMessageBox.ShowError(ex);
+            }
         }
 
-        private void Op6_Click(object? sender, EventArgs e)
+        private void _cmsItemClearImageHistoryClick(object? sender, EventArgs e)
         {
             SavedImages.Instance.ClearMemory();
         }
@@ -328,7 +427,7 @@ namespace canva.UI_ELEMENTS
 
 
 
-        private void Op3_Click(object? sender, EventArgs e)
+        private void _cmsItemToggleOrientClick(object? sender, EventArgs e)
         {
 
             _cmsOptions.Hide();
@@ -360,18 +459,35 @@ namespace canva.UI_ELEMENTS
 
         #region PRIVATE
 
+        #region ENUM
+        private enum E_CMS_OP
+        {
+
+            PASTE_CLIPBOARD,
+            TOGGLE_CACHE_IMAGES,
+
+            TOGGLE_ON_TOP,
+            TOGGLE_ORIENT,
+            OPEN_APPDATA,
+            
+
+            CLR_IMG_HISTORY,
+        }
+
+        #endregion
+
         #region METHODS
 
         #region EVENTS
 
 
-        private void Op2_Click(object? sender, EventArgs e)
+        private void _cmsItemPasteClipboardClick(object? sender, EventArgs e)
         {
             PasteClipboard();
             _cmsOptions.Close();
 
         }
-        private void Op1_Click(object? sender, EventArgs e)
+        private void _cmsItemAppDataClick(object? sender, EventArgs e)
         {
 
             LibUtil.DirectoryUtl.OpenDirectory(Program.appDataFolder, "Config.xml");
@@ -415,6 +531,23 @@ namespace canva.UI_ELEMENTS
             if (Program.Debug)
                 DbgWindow.Instance.Show();
 
+
+            if (Config.Instance.CacheImages && _initialInit)
+            {
+
+                List<Image> images = ImageCache.Instance.LoadCachedImages();
+
+                if (images.Count > 0)
+                {
+                    for (int i = 0; i < images.Count; i++)
+                    {
+                        SavedImages.Instance.LoadNewImageOnStartup(images[i]);
+                    }
+                }
+
+                _initialInit = false;
+            }
+
         }
 
 
@@ -457,6 +590,8 @@ namespace canva.UI_ELEMENTS
 
         private static UserInterface _instance;
         private static EAppOrientation _appOrient;
+        private static bool _initialInit = true;
+
 
         #endregion
 

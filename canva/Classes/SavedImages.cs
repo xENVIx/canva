@@ -1,4 +1,5 @@
-﻿using System;
+﻿using canva.DAT;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -93,10 +94,30 @@ namespace canva.Classes
 
         #region METHODS
 
+        public void LoadNewImageOnStartup(Image image)
+        {
+            ImageSave save = new ImageSave(image);
+
+            _images.Add(save);
+            _curInd = _images.Count - 1;
+
+
+            ChangeImage?.Invoke(this, new SavedImageEventArgs());
+        }
+
         public void LoadNewImage(ImageSave imgSv)
         {
 
+
+            
+
             if (imgSv.ImageFile == null) throw new ArgumentNullException("Image File in ImageSave class Cannot Be NULL");
+
+
+            if (Config.Instance.CacheImages)
+            {
+                ImageCache.Instance.CacheImage(imgSv.ImageFile);
+            }
 
             _images.Add(imgSv);
             _curInd = _images.Count - 1;

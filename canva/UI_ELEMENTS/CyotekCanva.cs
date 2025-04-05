@@ -276,6 +276,8 @@ namespace canva.UI_ELEMENTS
         }
 
 
+        
+
         public void PasteClipboard()
         {
             if (Clipboard.ContainsImage())

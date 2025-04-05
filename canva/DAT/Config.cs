@@ -30,12 +30,14 @@ namespace canva.DAT
 
         #region DATA-MEMBERS
 
-        [DataMember] public ENUM.EAppOrientation AppOrientation { get { return _appOrientation; } set { _appOrientation = value; } }
-        [DataMember] public String AppBackgroundColor { get { return _appColor; } set { _appColor = value; } }
-        [DataMember] public String AppTitle { get { return _appTitle; } set { _appTitle = value; } }
-        [DataMember] public bool ShowWarnings { get { return _showWarnings; } set { _showWarnings = value; } }
-        [DataMember] public String AppTextColor { get { return _appTextColor; } set { _appTextColor = value; } }
-        [DataMember] public int ConfigVersion { get { return _configVers; } set { _configVers = value; } }
+        [DataMember] public ENUM.EAppOrientation    AppOrientation      { get { return _appOrientation; }   set { _appOrientation = value; } }
+        [DataMember] public String                  AppBackgroundColor  { get { return _appColor; }         set { _appColor = value; } }
+        [DataMember] public String                  AppTitle            { get { return _appTitle; }         set { _appTitle = value; } }
+        [DataMember] public bool                    ShowWarnings        { get { return _showWarnings; }     set { _showWarnings = value; } }
+        [DataMember] public String                  AppTextColor        { get { return _appTextColor; }     set { _appTextColor = value; } }
+        [DataMember] public int                     ConfigVersion       { get { return _configVers; }       set { _configVers = value; } }
+        [DataMember] public bool                    CacheImages         { get { return _cacheImages; }      set { _cacheImages = value; } }
+        [DataMember] public bool                    AlwaysOnTop         { get { return _alwaysOnTop; }      set { _alwaysOnTop = value; } }
 
         #endregion
 
@@ -139,22 +141,42 @@ namespace canva.DAT
                 {
                     _instance = (Config)data;
 
-                    if (_instance.ConfigVersMatch) bSerializeNew = false;
-                    else _instance = new Config();
-
-
-
-                    if (_instance.CheckForNull())
+                    if (_instance.ConfigVersMatch && !_instance.CheckForNull()) bSerializeNew = false;
+                    else // _instance = new Config();
                     {
-                        bSerializeNew = true;
+
+                        Config def = new Config();
+                        if (_instance.AppBackgroundColor == null || _instance.AppBackgroundColor == "")
+                        {
+                            _instance.AppBackgroundColor = def.AppBackgroundColor;
+                        }
+
+                        if (_instance.AppTextColor == null || _instance.AppTextColor == "")
+                        {
+                            _instance.AppTextColor = def.AppTextColor;
+                        }
+
+
+                        if (_instance.AppTitle == null || _instance.AppTitle == "")
+                        {
+                            _instance.AppTitle = def.AppTitle;
+                        }
+
+                        Config oldConfig = _instance;
+
+
                         _instance = new Config();
+                        _instance.AppBackgroundColor = oldConfig.AppBackgroundColor;
+                        _instance.AppTextColor = oldConfig.AppTextColor;
+                        _instance.AppTitle = oldConfig.AppTitle;
                     }
+
 
                 }
                 
 
 
-                if (bSerializeNew || _instance.CheckForNull())
+                if (bSerializeNew)
                 {
 
                     try
@@ -193,6 +215,18 @@ namespace canva.DAT
 
         #endregion
 
+        public void SaveData()
+        {
+            try
+            {
+                LibUtil.XML.SerializeAppDataXML(typeof(Config), _instance);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
         #endregion
 
         #region CONSTRUCTORS
@@ -230,7 +264,12 @@ namespace canva.DAT
         private bool _showWarnings = true;
         private int _configVers = _vers;
 
-        private const int _vers = 2;
+        private bool _cacheImages = false;
+
+        private bool _alwaysOnTop = false;
+
+
+        private const int _vers = 4;
 
         #endregion
 

@@ -36,6 +36,16 @@ namespace canva
                 Config.OnInit();
                 AppDat.OnInit();
 
+                ImageCache.OnInit();
+
+                ImageCache.Instance.FilePath = appDataFolder;
+
+                if (!Config.Instance.CacheImages)
+                {
+                    // clear cache
+                    ImageCache.Instance.ClearCache();
+                    
+                }
 
                 UserInterface.OnInit();
 
