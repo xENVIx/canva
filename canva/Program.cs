@@ -34,7 +34,7 @@ namespace canva
 
 
                 Config.OnInit();
-
+                AppDat.OnInit();
 
 
                 UserInterface.OnInit();
@@ -59,7 +59,7 @@ namespace canva
 
 
 
-                    UserInterface.Instance.PostColorSet();
+                    //UserInterface.Instance.PostColorSet();
 
                     SavedImages.Instance.LoadCurrentImage();
 
@@ -67,6 +67,8 @@ namespace canva
                     ToggleAppOrient = false;
                 }
 
+
+                UserInterface.Instance.PostColorSet();
                 Application.Run(UserInterface.Instance);
 
             } while (ToggleAppOrient);
