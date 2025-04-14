@@ -420,6 +420,7 @@ namespace canva.UI_ELEMENTS
         private void _cmsItemClearImageHistoryClick(object? sender, EventArgs e)
         {
             SavedImages.Instance.ClearMemory();
+            ImageCache.Instance.ClearCache();
         }
 
         private void Op5_Click(object? sender, EventArgs e)
