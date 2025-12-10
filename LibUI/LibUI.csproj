@@ -17,7 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\LibUtil\LibUtil\LibUtil.csproj" />
     <ProjectReference Include="..\LibUtil\LibUtil.csproj" />
   </ItemGroup>
 

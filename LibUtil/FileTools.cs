@@ -7,20 +7,34 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Security.Cryptography;
 
-using OFD = System.Windows.Forms.OpenFileDialog;
 
 namespace LibUtil
 {
     public class FileTools
     {
 
+        #region CONSTRUCTORS
+
         #region PUBLIC
 
-        #region VARIABLES
+        public FileTools()
+        {
+
+        }
+
+        #endregion // public
+
+        #endregion
+
+        #region GET-SET
+
+        #region PUBLIC
 
         #region STATIC
 
-        public static FileTools Instance { get { if (_instance == null) throw new ArgumentNullException("FileTools Instance Is Null"); return _instance; } }
+        //public static FileTools Instance { get { if (_instance == null) throw new ArgumentNullException("FileTools Instance Is Null"); return _instance; } }
+
+        #endregion
 
         #endregion
 
@@ -101,76 +115,7 @@ namespace LibUtil
         }
 
 
-        /// <summary>
-        /// filter example: "CSV Files (*.csv)|*.csv|All Files(*.*)|*.*"
-        /// </summary>
-        /// <param name="filter"></param>
-        /// <param name="fileName"></param>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public bool OpenFileDialogReturnFilePath(String filter, out String fileName, String path = "")
-        {
-            bool ret = false;
-            fileName = "";
 
-            try
-            {
-                using OFD ofd = new OFD
-                {
-                    InitialDirectory = path,
-                    Filter = filter,
-                    Multiselect = false,
-                    Title = "Select A File"
-                };
-
-
-                if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                {
-                    fileName = ofd.FileName;
-                    ret = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                ret = false;
-            }
-
-
-            return ret;
-        }
-
-        public bool OpenFileDialogReturnFile(out String fileName, String path = "")
-        {
-            bool ret = false;
-            fileName = "";
-
-            try
-            {
-                using OFD ofd = new OFD
-                {
-                    InitialDirectory = path,
-                    Filter = "CSV Files (*.csv)|*.csv|All Files(*.*)|*.*",
-                    Multiselect = false,
-                    Title = "Select an IBA Exported CSV File"
-                };
-
-
-                if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                {
-                    fileName = ofd.FileName;
-                    ret = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                ret = false;
-            }
-
-
-            return ret;
-        }
 
 
         public bool DeleteFile(String filePath)
@@ -217,24 +162,13 @@ namespace LibUtil
 
         #endregion
 
-        #endregion
-
-        #region PRIVATE
-
-        #region CONSTRUCTORS
-
-        private FileTools()
-        {
-
-        }
-
-        #endregion
-
         #region VARIABLES
+
+        #region PROTECTED
 
         #region STATIC
 
-        private static FileTools _instance = new FileTools();
+        protected static FileTools _instance = new FileTools();
 
         #endregion
 
