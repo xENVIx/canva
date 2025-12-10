@@ -1,0 +1,49 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="MyCyotekImageBox.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Cyotek.Windows.Forms.ImageBox_1.1.4.2" Version="1.0.0" />
+    <PackageReference Include="ScottPlot.WinForms" Version="5.0.55" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\LibUtil\LibUtil\LibUtil.csproj" />
+    <ProjectReference Include="..\LibUtil\LibUtil.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="MyCyotekImageBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="MyDGVTextBoxCol.cs" />
+    <Compile Update="MyButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="MyRichTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="MyToolStripMenuItem.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="MyPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Special\ComboBoxWithLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Special\DateTimePickerWithLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+  </ItemGroup>
+
+</Project>

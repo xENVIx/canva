@@ -95,6 +95,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\LibUI\LibUI\LibUI.csproj" />
     <ProjectReference Include="..\..\LibUtil\LibUtil\LibUtil.csproj" />
+    <ProjectReference Include="..\LibUI\LibUI.csproj" />
+    <ProjectReference Include="..\LibUtil\LibUtil.csproj" />
   </ItemGroup>
 
   <ItemGroup>
