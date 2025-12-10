@@ -5,10 +5,6 @@ VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "canva", "canva\canva.csproj", "{6B4142B4-8CC5-4AFB-81C8-9566CA2F70D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibUtil", "..\LibUtil\LibUtil\LibUtil.csproj", "{7D82545B-C21A-4845-A155-C77D039F1644}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibUI", "..\LibUI\LibUI\LibUI.csproj", "{89A9146D-C1A4-4547-928B-F9075B78586E}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,14 +15,6 @@ Global
 		{6B4142B4-8CC5-4AFB-81C8-9566CA2F70D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B4142B4-8CC5-4AFB-81C8-9566CA2F70D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6B4142B4-8CC5-4AFB-81C8-9566CA2F70D0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7D82545B-C21A-4845-A155-C77D039F1644}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7D82545B-C21A-4845-A155-C77D039F1644}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7D82545B-C21A-4845-A155-C77D039F1644}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7D82545B-C21A-4845-A155-C77D039F1644}.Release|Any CPU.Build.0 = Release|Any CPU
-		{89A9146D-C1A4-4547-928B-F9075B78586E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{89A9146D-C1A4-4547-928B-F9075B78586E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{89A9146D-C1A4-4547-928B-F9075B78586E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{89A9146D-C1A4-4547-928B-F9075B78586E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
